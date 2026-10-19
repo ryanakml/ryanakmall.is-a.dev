@@ -1,8 +1,11 @@
 ---
 import ProductArtwork from './ProductArtwork.astro';
+import { getImage } from 'astro:assets';
+import flowdeskHomeWide from '../assets/flowdesk-final/flowdesk-main-desktop-tab.png';
+import flowdeskWorkDesktop from '../assets/flowdesk-final/flowdesk-work-desktop.png';
 interface Props { sizes?: string; context?: 'home' | 'work'; }
 const { context = 'home' } = Astro.props;
-const fullCapture = {src: '/art/products/flowdesk-desktop.webp'};
+const fullCapture = await getImage({ src: context === 'home' ? flowdeskHomeWide : flowdeskWorkDesktop, format: 'webp', quality: 88 });
 ---
 <div class="b-lens" data-lens>
   <div class="b-lens-controls" role="group" aria-label="Explore FlowDesk" hidden>
@@ -10,15 +13,15 @@ const fullCapture = {src: '/art/products/flowdesk-desktop.webp'};
     <button type="button" data-lens-select="architecture" aria-pressed="false" aria-controls="flowdesk-architecture">Behind it</button>
   </div>
   <div id="flowdesk-interface" data-lens-panel="interface">
-    <a class="b-art-frame b-capture" href={fullCapture.src} aria-label="Open full FlowDesk interface image">
+    <a class="b-art-frame b-capture" data-flowdesk-full-image href={fullCapture.src} aria-label="Open full FlowDesk interface image">
       <ProductArtwork product="flowdesk" context={context} />
     </a>
     <p class="b-picture-note">WhatsApp support · Review an AI draft</p>
     <p class="b-picture-source">FlowDesk · Inbox and AI-assisted reply workflow</p>
-    <a class="b-picture-link b-text-link" href={fullCapture.src}>Open full image <span aria-hidden="true">↗</span></a>
+    <a class="b-picture-link b-text-link" data-flowdesk-full-image href={fullCapture.src}>Open full image <span aria-hidden="true">↗</span></a>
   </div>
   <div id="flowdesk-architecture" data-lens-panel="architecture">
-    <div class="b-art-frame"><img src="/art/products/flowdesk-behind.webp" alt="Version-checked assignment: Jamie claims a conversation; Taylor’s stale claim receives a conflict" width="1250" height="760" loading="lazy" /></div>
+    <div class="b-art-frame"><ProductArtwork product="flowdesk" context={context} variant="architecture" /></div>
     <p class="b-picture-note">One conversation, one owner</p>
     <p class="b-picture-source">FlowDesk · Version-checked conversation assignment</p>
   </div>

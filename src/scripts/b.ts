@@ -37,7 +37,10 @@ document.querySelectorAll<HTMLElement>('[data-lens]').forEach((lens) => {
   const panels = [...lens.querySelectorAll<HTMLElement>('[data-lens-panel]')];
   function show(id: string, animate = true) {
     buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.lensSelect === id)));
-    panels.forEach(panel => { panel.hidden = panel.dataset.lensPanel !== id; });
+    panels.forEach(panel => {
+      panel.hidden = panel.dataset.lensPanel !== id;
+      if (panel.hidden) panel.querySelectorAll('video').forEach(video => video.pause());
+    });
     const current = panels.find(panel => !panel.hidden);
     if (animate && current && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
       current.animate([{ opacity: .5, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 420, easing: 'cubic-bezier(.16,1,.3,1)' });
@@ -47,4 +50,17 @@ document.querySelectorAll<HTMLElement>('[data-lens]').forEach((lens) => {
   lens.dataset.ready = '';
   lens.querySelector<HTMLElement>('.b-lens-controls')!.hidden = false;
   buttons.forEach(button => button.addEventListener('click', () => show(button.dataset.lensSelect!)));
+});
+
+// The full-image links follow the responsive image currently shown on this device.
+document.querySelectorAll<HTMLElement>('[data-lens]').forEach(lens => {
+  const image = lens.querySelector<HTMLImageElement>('[data-flowdesk-full-image] img');
+  if (!image) return;
+  lens.querySelectorAll<HTMLAnchorElement>('[data-flowdesk-full-image]').forEach(link => {
+    link.addEventListener('click', () => {
+      const source = [...(image.closest('picture')?.querySelectorAll('source') ?? [])]
+        .find(source => matchMedia(source.media).matches);
+      link.href = source?.dataset.fullSrc || image.dataset.fullSrc || image.currentSrc || image.src;
+    });
+  });
 });

@@ -1,19 +1,81 @@
 ---
-interface Props { product: 'wabrix' | 'flowdesk' | 'deadbolt'; context?: 'home' | 'work' | 'thumbnail'; }
-const { product, context = 'home' } = Astro.props;
-const compactTablet = product !== 'deadbolt' && (context === 'home' || context === 'thumbnail');
-const alts = {
-  wabrix: 'Wabrix WhatsApp chatbot: a customer asks for support hours, the assistant answers from business knowledge, and the team can take over.',
-  flowdesk: 'FlowDesk support inbox: Alex Morgan asks a WhatsApp question and an AI reply draft awaits an operator’s review.',
-  deadbolt: 'Deadbolt pipeline: ingress creates work, workers execute tasks, and recovery retries eligible work while retaining completed output.',
+import { getImage } from 'astro:assets';
+import mainWide from '../assets/deadbolt-final/main-wide.png';
+import homeMobile from '../assets/deadbolt-final/home-mobile.png';
+import workDesktop from '../assets/deadbolt-final/work-desktop.png';
+import workTablet from '../assets/deadbolt-final/work-tablet.png';
+import workMobile from '../assets/deadbolt-final/work-mobile.png';
+import preview from '../assets/deadbolt-final/preview.png';
+import wabrixHomeWide from '../assets/wabrix-final/wabrix-master-desktop-tab.png';
+import wabrixHomeMobile from '../assets/wabrix-final/wabrix-master-mobile.png';
+import wabrixWorkDesktop from '../assets/wabrix-final/wabrix-work-desktop.png';
+import wabrixWorkTablet from '../assets/wabrix-final/wabrix-work-tab.png';
+import wabrixWorkMobile from '../assets/wabrix-final/wabrix-work-mobile.png';
+import wabrixPreview from '../assets/wabrix-final/wabrix-work-preview.png';
+import flowdeskHomeWide from '../assets/flowdesk-final/flowdesk-main-desktop-tab.png';
+import flowdeskHomeMobile from '../assets/flowdesk-final/flowdesk-main-mobile.png';
+import flowdeskWorkDesktop from '../assets/flowdesk-final/flowdesk-work-desktop.png';
+import flowdeskWorkTablet from '../assets/flowdesk-final/flowdesk-work-tab.png';
+import flowdeskWorkMobile from '../assets/flowdesk-final/flowdesk-work-mobile.png';
+import flowdeskPreview from '../assets/flowdesk-final/flowdesk-work-preview.png';
+import flowdeskBehindWide from '../assets/flowdesk-final/flowdesk-behind-it-desktop.png';
+import flowdeskBehindMobile from '../assets/flowdesk-final/flowdesk-behind-it-mobile.png';
+interface Props { product: 'wabrix' | 'flowdesk' | 'deadbolt'; context?: 'home' | 'work' | 'thumbnail'; variant?: 'interface' | 'architecture'; }
+const { product, context = 'home', variant = 'interface' } = Astro.props;
+const finalized = {
+  deadbolt: {
+    home: [homeMobile, mainWide, mainWide],
+    work: [workMobile, workTablet, workDesktop],
+    thumbnail: [preview, preview, preview],
+  },
+  wabrix: {
+    home: [wabrixHomeMobile, wabrixHomeWide, wabrixHomeWide],
+    work: [wabrixWorkMobile, wabrixWorkTablet, wabrixWorkDesktop],
+    thumbnail: [wabrixPreview, wabrixPreview, wabrixPreview],
+  },
+  flowdesk: {
+    home: [flowdeskHomeMobile, flowdeskHomeWide, flowdeskHomeWide],
+    work: [flowdeskWorkMobile, flowdeskWorkTablet, flowdeskWorkDesktop],
+    thumbnail: [flowdeskPreview, flowdeskPreview, flowdeskPreview],
+  },
 };
-const wide = product === 'deadbolt' ? [1400, 720] : [1200, 720];
-const mobile = product === 'deadbolt' ? [700, 820] : [700, 800];
-const tablet = product === 'deadbolt' ? wide : compactTablet ? mobile : [1000, 720];
-const base = `/art/products/${product}`;
+const architecture = [flowdeskBehindMobile, flowdeskBehindWide, flowdeskBehindWide];
+const variants = product === 'flowdesk' && variant === 'architecture' ? architecture : finalized[product][context];
+const finalImages = await Promise.all(
+  variants.map(async src => {
+    const widths = [...new Set([480, 960, src.width].filter(width => width <= src.width))];
+    const images = await Promise.all(widths.map(width => getImage({ src, width, format: 'webp', quality: 88 })));
+    return { width: src.width, height: src.height, src: images[images.length - 1].src,
+      srcset: images.map((image, index) => `${image.src} ${widths[index]}w`).join(', ') };
+  })
+);
+const deadboltAlt = context === 'work'
+  ? 'Deadbolt workflow showcase with execution dependencies, a run inspector, worker events and retry recovery.'
+  : 'Deadbolt execution: parsing is complete, embeddings run on a second attempt with another worker, and dependent tasks wait.';
+const finalAlt = product === 'wabrix'
+  ? context === 'home'
+    ? 'Wabrix knowledge base linked to a bot emulator answering a support-hours question from business knowledge.'
+    : 'Wabrix WhatsApp conversation: the assistant answers from support-hours knowledge, with controls to pause automation.'
+  : product === 'flowdesk'
+    ? variant === 'architecture'
+      ? 'FlowDesk message flow from WhatsApp ingress through durable storage, background workers and human review to outbound delivery.'
+      : context === 'home'
+        ? 'FlowDesk conversation and AI draft awaiting human review, with conversation ownership shown alongside.'
+        : 'FlowDesk support workspace showing a WhatsApp conversation, an AI draft awaiting human review and conversation ownership.'
+    : deadboltAlt;
+const sizes = context === 'thumbnail'
+  ? '(max-width: 600px) calc(100vw - 40px), (max-width: 900px) 45vw, 32vw'
+  : context === 'home'
+    ? product === 'flowdesk'
+      ? '(max-width: 600px) calc(100vw - 40px), (max-width: 900px) 45vw, 56vw'
+      : '(max-width: 600px) calc(100vw - 40px), (max-width: 900px) calc(100vw - 48px), calc(100vw - 56px)'
+    : '(max-width: 600px) calc(100vw - 40px), (max-width: 900px) calc(100vw - 48px), (max-width: 1600px) calc(100vw - 56px), 1544px';
+
 ---
 <picture class="product-artwork">
-  <source media="(max-width: 600px)" srcset={`${base}-mobile.webp`} width={mobile[0]} height={mobile[1]} />
-  <source media="(max-width: 900px)" srcset={`${base}-${compactTablet ? 'mobile' : 'tablet'}.webp`} width={tablet[0]} height={tablet[1]} />
-  <img src={`${base}-desktop.webp`} width={wide[0]} height={wide[1]} alt={alts[product]} loading="lazy" decoding="async" />
+  <source media="(max-width: 600px)" type="image/webp" data-full-src={finalImages[0].src} srcset={finalImages[0].srcset} sizes={sizes} width={finalImages[0].width} height={finalImages[0].height} />
+  <source media="(max-width: 900px)" type="image/webp" data-full-src={finalImages[1].src} srcset={finalImages[1].srcset} sizes={sizes} width={finalImages[1].width} height={finalImages[1].height} />
+  <img src={finalImages[2].src} data-full-src={finalImages[2].src} srcset={finalImages[2].srcset} sizes={sizes}
+    width={finalImages[2].width} height={finalImages[2].height}
+    alt={finalAlt} loading="lazy" decoding="async" />
 </picture>

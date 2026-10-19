@@ -88,3 +88,5 @@
 .work-evidence a { display: inline-block; padding-block: 11px; min-height: 44px; }
 
 .work-thumbnail-source { font-size: var(--b-small); line-height: 1.5; color: var(--b-muted); }
+
+.work-demo-video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; background: #0b0c0c; }

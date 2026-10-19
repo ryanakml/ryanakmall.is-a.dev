@@ -21,7 +21,10 @@ if (workBrowser) {
       if (link.dataset.workSelect === id) link.setAttribute('aria-current', 'true');
       else link.removeAttribute('aria-current');
     });
-    panels.forEach(panel => { panel.hidden = panel.dataset.workPanel !== id; });
+    panels.forEach(panel => {
+      panel.hidden = panel.dataset.workPanel !== id;
+      if (panel.hidden) panel.querySelectorAll('video').forEach(video => video.pause());
+    });
     document.querySelectorAll<HTMLElement>('[data-work-related]').forEach(item => {
       item.hidden = item.dataset.workRelated === id;
     });
@@ -52,4 +55,15 @@ if (workBrowser) {
     window.addEventListener('hashchange', () => followHash(true));
     if (ids.has(readHash())) document.fonts.ready.then(() => followHash(true));
   }
+}
+
+// Stop the optional demo when the reader leaves it or backgrounds the page.
+const demo = document.querySelector<HTMLVideoElement>('.work-demo-video');
+if (demo) {
+  new IntersectionObserver(entries => {
+    if (!entries[0].isIntersecting) demo.pause();
+  }).observe(demo);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) demo.pause();
+  });
 }

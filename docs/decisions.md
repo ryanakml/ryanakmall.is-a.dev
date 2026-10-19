@@ -36,3 +36,27 @@ Owner permits fictional demo data and faithful reconstructed showcases of actual
 
 - Owner selected header order Work · About · Résumé ↗ · Say hello. Restore the original text arrow for consistency; footer résumé remains a subtle link to the same unchanged global CV.
 - Owner explicitly authorized committing and pushing the accumulated portfolio changes to GitHub. Publish production code, selected assets/CV, editable figure sources and provenance/notices. Raw incoming asset packets and local preview/QA output remain excluded. No live deployment is requested.
+
+### 2026-10-21 — finalized Deadbolt asset integration
+
+- Owner requested integrating the supplied final Home, featured Work and Other Threads assets without redesigning or changing project descriptions.
+- Home uses main-wide on desktop/tablet and home-mobile on mobile; featured Work selects its three supplied variants; Other Threads uses preview.png. Existing responsive component, layout and card contain behavior are preserved. The preceding Work trial is superseded.
+- Browser QA covers all nine placement/viewport combinations at 1440/768/390. Source selection, successful decoding, full main-image proportions and no page overflow are checked. No push/deployment is part of this integration request.
+
+### 2026-10-21 — finalized Wabrix asset integration
+
+- Owner requested final Home, featured Work and Other Threads Wabrix assets using the established Deadbolt responsive image approach, without redesign or copy edits.
+- Home selects the supplied desktop/tablet master or mobile master; Work selects the three dedicated showcase variants; Other Threads uses the compact preview at every width. Existing containers and CSS are sufficient; obsolete served Wabrix variants are removed.
+- Browser QA passed all nine placement/viewport combinations at 1440/768/390: correct source, successful decoding, native main-image proportions, thumbnail containment and no page overflow. Screenshots were visually reviewed. All nine Deadbolt regression checks also passed. Typecheck and build passed; FlowDesk source and unrelated styles/components remain unchanged. No push/deployment requested.
+
+### 2026-10-21 — optional Deadbolt demo
+
+- Owner authorized selecting and integrating one supplied demo video. Selected deadbolt1.mp4 (30s); retain the final still overview as the default and reuse existing lens buttons for an optional Demo on Work only.
+- Native HTML5 controls, playsinline, preload none, a real video-frame WebP poster, no autoplay/loop and a concise accessible description. Full 16:9 frame retained; H.264 delivery reduced from 8.9MB to approximately 3.7MB without adding dependencies.
+- Real Chromium checks at 1440/768/390 verified no MP4 download until play, successful playback, native controls, correct proportions, no overflow and pausing on Overview/project changes. Screenshots reviewed at all widths; typecheck/build passed. No push/deployment requested.
+
+### 2026-10-21 — finalized FlowDesk asset integration
+
+- Owner requested final FlowDesk Interface, Behind it and Other Threads imagery across Home and Work, following the established responsive image approach. Actual incoming folder is `generated-assets-new/flowdesk-final/`.
+- Home selects its desktop/tablet or mobile Interface; Work selects desktop/tablet/mobile Interface; both use desktop/tablet or mobile Behind it; Other Threads uses one preview. Existing component, lens controls, image containers and CSS suffice. Responsive full-image links open the shown variant. Obsolete served FlowDesk variants were removed.
+- Browser QA passed all 15 placement/viewport combinations at 1440/768/390: correct source, decoded image, native full-image proportions, thumbnail containment, working controls/links and no overflow. Screenshots were reviewed. Astro check/build and Taste source lint passed. No push/deployment requested.
