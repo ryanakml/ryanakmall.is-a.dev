@@ -1,0 +1,52 @@
+---
+import '../styles/fonts.css';
+interface Props { title: string; description?: string; bodyClass?: string; }
+const { title, description = 'Ryan Akmal Pasya · software, questions, and the things that follow.', bodyClass = '' } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#f7f9fa" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {Astro.site && <>
+      <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+      <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+      <meta property="og:image" content={new URL('/social-preview.png', Astro.site)} />
+      <meta name="twitter:image" content={new URL('/social-preview.png', Astro.site)} />
+      <meta property="og:image:alt" content="Thinking out loud · Ryan Akmal, software engineer" />
+    </>}
+    <link rel="preload" href="/fonts/imbue-latin-opsz-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/albert-sans-latin-400-500.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+  </head>
+  <body class={bodyClass}>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <slot />
+  </body>
+</html>
+<style is:global>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; }
+  img { max-width: 100%; height: auto; display: block; }
+  button, input, select, textarea { font: inherit; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  a { color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 3px solid currentColor; outline-offset: 5px; }
+  .skip-link { position: fixed; left: 20px; top: 12px; z-index: 100; transform: translateY(-160%); background: #fff; color: #17252b; padding: 14px 20px; font: 18px sans-serif; }
+  .skip-link:focus { transform: none; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>

@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import '../styles/b.css';
+---
+<Base title="Page not found · Ryan Akmal" bodyClass="concept-b">
+  <SiteHeader />
+  <main id="main" class="b-frame b-missing">
+    <h1>Lost the<br />thread?</h1>
+    <p>This page isn't here. The rest of the story is.</p>
+    <a class="b-button" href="/"><span>Back home</span><span aria-hidden="true">↗</span></a>
+  </main>
+  <SiteFooter />
+  <script>import '../scripts/b';</script>
+</Base>

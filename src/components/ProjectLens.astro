@@ -1,0 +1,26 @@
+---
+import { Image, getImage } from 'astro:assets';
+import capture from '../assets/flowdesk-interface.png';
+interface Props { sizes?: string; }
+const { sizes = '(max-width: 600px) calc(100vw - 40px), (max-width: 900px) 45vw, 58vw' } = Astro.props;
+const fullCapture = await getImage({ src: capture, format: 'webp', quality: 90 });
+---
+<div class="b-lens" data-lens>
+  <div class="b-lens-controls" role="group" aria-label="Explore FlowDesk" hidden>
+    <button type="button" data-lens-select="interface" aria-pressed="true" aria-controls="flowdesk-interface">Interface</button>
+    <button type="button" data-lens-select="architecture" aria-pressed="false" aria-controls="flowdesk-architecture">Behind it</button>
+  </div>
+  <div id="flowdesk-interface" data-lens-panel="interface">
+    <a class="b-art-frame b-capture" href={fullCapture.src} aria-label="Open full FlowDesk interface image">
+      <Image src={capture} widths={[480, 800, 1200, 1460]} sizes={sizes} format="webp" quality={85} alt="Reconstructed FlowDesk inbox interface using fictional demo messages and accounts" loading="lazy" />
+    </a>
+    <p class="b-picture-note">WhatsApp support workspace</p>
+    <p class="b-picture-source">FlowDesk · Reconstructed interface with fictional demo data</p>
+    <a class="b-picture-link b-text-link" href={fullCapture.src}>Open full image <span aria-hidden="true">↗</span></a>
+  </div>
+  <div id="flowdesk-architecture" data-lens-panel="architecture">
+    <div class="b-art-frame"><img src="/art/flowdesk.png" alt="Architecture illustration: a WhatsApp event is stored with a PostgreSQL outbox, then processed by a background worker" width="1400" height="1000" loading="lazy" /></div>
+    <p class="b-picture-note">From message to background work</p>
+    <p class="b-picture-source">FlowDesk · Editorial illustration of its described architecture</p>
+  </div>
+</div>

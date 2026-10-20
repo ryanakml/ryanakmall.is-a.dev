@@ -1,0 +1,26 @@
+{
+  "stylesheet": "https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62.5..125,100..900&family=Imbue:opsz,wght@10..100,400&family=Albert+Sans:wght@400;500&display=swap",
+  "fonts": [
+    {
+      "family": "Albert Sans",
+      "file": "albert-sans-latin-400-500.woff2",
+      "bytes": 32008,
+      "source": "https://fonts.gstatic.com/s/albertsans/v4/i7dOIFdwYjGaAMFtZd_QA1ZbYFeQGQyU.woff2",
+      "licence": "https://raw.githubusercontent.com/google/fonts/main/ofl/albertsans/OFL.txt"
+    },
+    {
+      "family": "Archivo",
+      "file": "archivo-latin-variable.woff2",
+      "bytes": 90096,
+      "source": "https://fonts.gstatic.com/s/archivo/v25/k3kQo8UDI-1M0wlSfdnoLmvDIaI.woff2",
+      "licence": "https://raw.githubusercontent.com/google/fonts/main/ofl/archivo/OFL.txt"
+    },
+    {
+      "family": "Imbue",
+      "file": "imbue-latin-opsz-400.woff2",
+      "bytes": 24600,
+      "source": "https://fonts.gstatic.com/s/imbue/v29/RLpiK5P16Ki3fXhj5cXw8ujpcPk4d-o_U1vMJ6ZYmQ.woff2",
+      "licence": "https://raw.githubusercontent.com/google/fonts/main/ofl/imbue/OFL.txt"
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import ProjectLens from '../components/ProjectLens.astro';
+import wabrixArtwork from '../assets/wabrix-concept.png';
+import flowdeskArtwork from '../assets/flowdesk-interface.png';
+import { contributions } from '../data/contributions';
+import { projects } from '../data/projects';
+import '../styles/b.css';
+import '../styles/work.css';
+---
+
+<Base title="Work, closer up · Ryan Akmal Pasya" description="A closer look at FlowDesk, Wabrix and Deadbolt: the questions, building decisions and scope behind Ryan's personal and collaborative software projects." bodyClass="concept-b">
+  <SiteHeader active="work" />
+  <main id="main" class="work-page">
+    <section class="work-opening b-hero b-frame" aria-labelledby="work-title">
+      <h1 id="work-title" data-b-load>Work,<br />closer up.</h1>
+      <div data-b-load>
+        <p class="b-lead">The things I’ve been building, and a little more of the thinking behind them.</p>
+        <p>Pick a project. Follow the question, the approach and where the work stands.</p>
+      </div>
+    </section>
+
+    <div class="work-reading b-frame" data-work-browser>
+      <nav id="work-index" class="work-chooser" aria-label="Choose a project">
+        {projects.map(project => (
+          <a href={`#${project.id}`} data-work-select={project.id} aria-controls={project.id}>
+            <span>{project.name}</span><span class="work-chooser-arrow" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </nav>
+
+      <div class="work-projects">
+        {projects.map(project => (
+          <article id={project.id} class="work-project" data-work-panel={project.id} aria-labelledby={`${project.id}-title`}>
+            <div class="work-project-intro">
+              <div><h2 id={`${project.id}-title`} data-b-reveal="title">{project.name}</h2><a class="b-button work-source" href={project.repository}><span>Explore the repository</span><span aria-hidden="true">↗</span></a></div>
+              <p class="b-lead" data-b-reveal="text">{project.introduction}</p>
+            </div>
+
+            <figure class="work-visual b-work-figure" data-work-visual data-b-reveal="picture">
+              {project.id === 'flowdesk' ? (
+                <ProjectLens sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 900px) calc(100vw - 48px), (max-width: 1600px) calc(100vw - 56px), 1544px" />
+              ) : project.id === 'wabrix' ? (
+                <>
+                  <div class="b-art-frame work-wabrix-art">
+                    <Image src={wabrixArtwork} widths={[480, 800, 1200, 1800]} sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 900px) calc(100vw - 48px), (max-width: 1600px) calc(100vw - 56px), 1544px" format="webp" quality={85} alt="Wabrix repository concept artwork depicting a WhatsApp inbox with illustrative interface data" width={1881} height={836} loading="lazy" />
+                  </div>
+                  <figcaption>Wabrix · Repository concept artwork with sample interface data</figcaption>
+                </>
+              ) : (
+                <>
+                  <div class="b-art-frame work-deadbolt-art"><img src="/art/deadbolt.png" alt="Conceptual Deadbolt illustration: an earlier worker claim stops at a fence while a current ownership claim continues" width="1400" height="1000" loading="lazy" /></div>
+                  <figcaption>Deadbolt · Conceptual illustration of worker ownership</figcaption>
+                </>
+              )}
+            </figure>
+
+            <div class="work-notes">
+              {project.notes.map(note => (
+                <div class="work-note">
+                  <h3 data-b-reveal="title">{note.heading}</h3>
+                  <div data-b-reveal="text">
+                    {note.paragraphs.map(paragraph => <p>{paragraph}</p>)}
+                    {note.heading === 'The scope' && <>
+                      <p class="work-verification">Source reviewed. Runtime not independently tested.</p>
+                      <nav class="work-evidence" aria-label={`${project.name} technical evidence`}>
+                        {project.evidence.map(item => <a class="b-text-link" href={item.url}>{item.label}</a>)}
+                      </nav>
+                    </>}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <a class="b-text-link work-back" href="#work-index">Choose another project ↑</a>
+            {project.related && <p class="work-related-bottom"><a class="b-text-link work-related" href={`#${project.related.id}`}>{project.related.label}</a></p>}
+          </article>
+        ))}
+      </div>
+    </div>
+    <section class="work-more b-frame" aria-labelledby="more-work-title">
+      <div class="work-more-intro">
+        <h2 id="more-work-title" data-b-reveal="title">Other threads</h2>
+        <p data-b-reveal="text">Another build, another question. Or a small change in someone else's code.</p>
+      </div>
+      <div class="work-more-gallery">
+        <article data-work-related="flowdesk" data-b-reveal="picture">
+          <a href="#flowdesk"><Image src={flowdeskArtwork} widths={[480, 800]} sizes="(max-width: 600px) calc(100vw - 40px), 32vw" format="webp" alt="FlowDesk inbox reconstruction with fictional data" loading="lazy" /><h3>FlowDesk</h3></a>
+          <p class="work-thumbnail-source">Interface reconstruction · Fictional demo data</p>
+        </article>
+        <article data-work-related="wabrix" data-b-reveal="picture">
+          <a href="#wabrix"><Image src={wabrixArtwork} widths={[480, 800]} sizes="(max-width: 600px) calc(100vw - 40px), 32vw" format="webp" alt="Wabrix repository concept artwork with illustrative data" loading="lazy" /><h3>Wabrix</h3></a>
+          <p class="work-thumbnail-source">Repository concept artwork · Sample data</p>
+        </article>
+        <article data-work-related="deadbolt" data-b-reveal="picture">
+          <a href="#deadbolt"><img src="/art/deadbolt.png" width="1400" height="1000" loading="lazy" alt="Conceptual illustration of Deadbolt worker ownership" /><h3>Deadbolt</h3></a>
+          <p class="work-thumbnail-source">Conceptual illustration · Collaborative project</p>
+        </article>
+        <article data-b-reveal="picture">
+          <a href="/#contributions"><img src="/art/contribution.png" width="1400" height="1000" loading="lazy" alt="Editorial illustration of the Celery path-expansion contribution" /><h3>Upstream</h3></a>
+          <p class="work-thumbnail-source">Editorial illustration · Celery path fix</p>
+          <div class="work-upstream-links">{contributions.map(item => <a href={item.url}>{item.name}</a>)}</div>
+        </article>
+      </div>
+    </section>
+  </main>
+  <SiteFooter />
+  <script>import '../scripts/work';</script>
+</Base>

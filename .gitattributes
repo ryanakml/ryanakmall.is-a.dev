@@ -1,0 +1,2 @@
+# Preserve the upstream OFL notice text verbatim, including original whitespace.
+public/fonts/*-OFL.txt -whitespace

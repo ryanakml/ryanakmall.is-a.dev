@@ -1,0 +1,12 @@
+---
+interface Props { active?: 'home' | 'work'; }
+const { active = 'home' } = Astro.props;
+---
+<header class="b-header b-frame">
+  <a class="b-name" href="/" aria-label="Ryan Akmal home" aria-current={active === 'home' ? 'page' : undefined}>Ryan Akmal</a>
+  <nav aria-label="Main navigation">
+    <a href="/work/" aria-current={active === 'work' ? 'page' : undefined}>Work</a>
+    <a href="/#about">About</a>
+    <a href="/#contact">Say hello</a>
+  </nav>
+</header>

@@ -1,0 +1,132 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import wabrixArtwork from '../assets/wabrix-concept.png';
+import ProjectLens from '../components/ProjectLens.astro';
+import '../styles/b.css';
+
+import { contributions } from '../data/contributions';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+---
+
+<Base title="Ryan Akmal · Thinking out loud" description="Software, questions, and a little of the person behind them. The personal home of Ryan Akmal Pasya." bodyClass="concept-b">
+  <SiteHeader />
+
+  <main id="main">
+    <section class="b-hero b-frame" aria-labelledby="b-title">
+      <h1 id="b-title" class="b-hero-title">
+        <span class="b-title-first" data-b-load>Thinking</span>
+        <span class="b-title-second" data-b-load>
+          <span>out</span>
+          <span class="b-inline-picture" aria-hidden="true"><img src="/art/flowdesk.png" alt="" width="1400" height="1000" fetchpriority="high" /></span>
+          <span>loud</span>
+        </span>
+      </h1>
+      <div class="b-hero-bottom">
+        <p class="b-introduction" data-b-load>I'm Ryan, a software engineer. Here are a few things I've built and the questions that kept me going.</p>
+        <a class="b-button" href="#work" data-b-load><span>See what I mean</span><span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+    <section id="work" class="b-work b-frame" aria-labelledby="b-work-title">
+      <div class="b-chapter-intro">
+        <h2 id="b-work-title" data-b-reveal="title">One idea,<br />two builds</h2>
+        <p class="b-lead" data-b-reveal="text">I explored WhatsApp support in Wabrix, then took another route with FlowDesk. Same problem, different building decisions.</p>
+      </div>
+
+      <article class="b-wabrix b-work-spread" aria-labelledby="b-wabrix-title">
+        <figure class="b-work-figure" data-b-reveal="picture">
+          <div class="b-art-frame"><Image src={wabrixArtwork} widths={[480, 800, 1200, 1881]} sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 900px) 45vw, 58vw" format="webp" quality={85} alt="Wabrix repository concept artwork depicting a WhatsApp chat and inbox with illustrative dashboard data" loading="lazy" /></div>
+          <figcaption>Wabrix · Repository concept artwork with sample interface data</figcaption>
+        </figure>
+        <div class="b-work-copy">
+          <h3 id="b-wabrix-title" data-b-reveal="title">Wabrix</h3>
+          <p data-b-reveal="text">An inbox experiment bringing WhatsApp, AI responses and human handoff together. Built with Next.js, Convex, Clerk and Cloudflare Workers.</p>
+          <a class="b-text-link" href="/work/#wabrix" data-b-reveal="text">Explore Wabrix</a>
+        </div>
+      </article>
+
+      <article class="b-flowdesk b-work-spread" aria-labelledby="b-flowdesk-title">
+        <div class="b-work-copy">
+          <h3 id="b-flowdesk-title" data-b-reveal="title">FlowDesk</h3>
+          <p data-b-reveal="text">The support idea revisited with React, Express and PostgreSQL. This time, the work behind the inbox includes background processing and a transactional outbox.</p>
+          <a class="b-text-link" href="/work/#flowdesk" data-b-reveal="text">Explore FlowDesk</a>
+          <details class="b-deeper" data-b-reveal="text">
+            <summary>A little deeper <span class="b-details-mark" aria-hidden="true">+</span></summary>
+            <div class="b-deeper-content">
+              <p>Wabrix uses Convex for its data and realtime layer. FlowDesk puts an Express API and PostgreSQL behind the interface, with background work handled separately. Similar product territory, different building decisions.</p>
+              <p>Both are personal projects, with different architecture choices around the same support workflow.</p>
+            </div>
+          </details>
+        </div>
+        <figure class="b-work-figure" data-b-reveal="picture">
+          <ProjectLens />
+        </figure>
+      </article>
+      <a class="b-text-link b-all-work" href="/work/">A closer look at the work <span aria-hidden="true">↗</span></a>
+    </section>
+
+    <section class="b-deadbolt" aria-labelledby="b-deadbolt-title">
+      <div class="b-frame">
+        <div class="b-deadbolt-intro">
+          <h2 id="b-deadbolt-title" data-b-reveal="title">Who owns<br />the work?</h2>
+          <div data-b-reveal="text">
+            <p class="b-lead">A different question, this time with a friend.</p>
+            <p>Deadbolt explores workflow execution in Go and PostgreSQL: worker ownership, leases and recovery when the process doing the work stops.</p>
+            <p>It's collaborative work in active development. The repository includes worker code, tests and ongoing implementation notes.</p>
+            <a class="b-text-link" href="/work/#deadbolt">Explore Deadbolt</a>
+          </div>
+        </div>
+        <figure class="b-deadbolt-figure" data-b-reveal="picture">
+          <div class="b-art-frame"><img src="/art/deadbolt.png" alt="Editorial illustration of the worker-ownership questions explored by Deadbolt" width="1400" height="1000" loading="lazy" /></div>
+          <figcaption>Deadbolt · Conceptual illustration of worker ownership</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="contributions" class="b-contributions b-frame" aria-labelledby="b-contributions-title">
+      <div class="b-contribution-top">
+        <h2 id="b-contributions-title" data-b-reveal="title">In good<br />company</h2>
+        <p class="b-lead" data-b-reveal="text">I also like finding my way around someone else's code. A few contributions that made it in.</p>
+      </div>
+      <div class="b-contribution-body">
+        <figure class="b-contribution-figure" data-b-reveal="picture">
+          <div class="b-art-frame"><img src="/art/contribution.png" alt="Editorial illustration of the Celery contribution: expanding the tilde character into a home-directory path" width="1400" height="1000" loading="lazy" /></div>
+          <figcaption>The Celery contribution · Original editorial artwork</figcaption>
+        </figure>
+        <div class="b-contribution-list">
+          {contributions.map((item) => (
+            <article class="b-contribution" data-b-reveal="item">
+              <div class="b-contribution-name"><h3><a href={item.url}>{item.name}</a></h3><span>{item.detail}</span></div>
+              <p>{item.description}</p>
+              <a class="b-text-link" href={item.url}>Read the pull request</a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="b-about b-frame" aria-labelledby="b-about-title">
+      <h2 id="b-about-title" data-b-reveal="title">A little<br />about me</h2>
+      <div class="b-about-body">
+        <div class="b-about-main" data-b-reveal="text">
+          <p>I like following a feature past the interface: into the database, through background work, and into the awkward failure cases.</p>
+          <p>I've learned independently, moving from data analysis through machine learning, LLMs and MLOps into fullstack development.</p>
+        </div>
+        <div class="b-about-side">
+          <p class="b-process" data-b-reveal="text">I build personal projects and contribute fixes and documentation upstream. Deadbolt is a collaboration with a friend. AI is a substantial part of how I plan, implement and review software.</p>
+          <div class="b-aside" data-b-reveal="text">
+            <p>Also, I think out loud. Literally.</p>
+            <blockquote lang="id"><span data-b-reveal="thought">“ah gabisa gini</span><span data-b-reveal="thought" data-thought-pause>ohh gituu”</span></blockquote>
+            <p>Usually to myself. That's how a lot of the thinking happens.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+  </main>
+  <SiteFooter />
+  <script>import '../scripts/b';</script>
+</Base>

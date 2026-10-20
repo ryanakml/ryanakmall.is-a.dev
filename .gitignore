@@ -1,0 +1,53 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+*.log
+
+# Credentials and local configuration (examples may be committed deliberately).
+.env
+.env.*
+!.env.example
+!.env.*.example
+.npmrc
+.netrc
+.envrc
+.aws/
+.ssh/
+.vercel/
+.netlify/
+.auth/
+id_rsa
+id_ed25519
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+service-account*.json
+
+# Local tooling, private interview/evidence state and supplied real-data captures.
+/.agents/
+/.taste-skill/
+/state/
+/flodesk-deadbolt-assets/
+/START_IN_CODEX.md
+
+# Research, archived prototypes, browser recordings, reports and build checks.
+/outputs/
+/.publish-check/
+/.cache/
+/.tmp/
+/tmp/
+/temp/
+/coverage/
+/playwright-report/
+/test-results/
+*.har
+*.tsbuildinfo
+__pycache__/
+*.pyc
+
+# Historical prototype helpers and unused duplicate artwork.
+/scripts/verify-prototypes.mjs
+/public/art/wabrix.png
