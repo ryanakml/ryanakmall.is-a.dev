@@ -1,0 +1,19 @@
+---
+interface Props { product: 'wabrix' | 'flowdesk' | 'deadbolt'; context?: 'home' | 'work' | 'thumbnail'; }
+const { product, context = 'home' } = Astro.props;
+const compactTablet = product !== 'deadbolt' && (context === 'home' || context === 'thumbnail');
+const alts = {
+  wabrix: 'Wabrix WhatsApp chatbot: a customer asks for support hours, the assistant answers from business knowledge, and the team can take over.',
+  flowdesk: 'FlowDesk support inbox: Alex Morgan asks a WhatsApp question and an AI reply draft awaits an operator’s review.',
+  deadbolt: 'Deadbolt pipeline: ingress creates work, workers execute tasks, and recovery retries eligible work while retaining completed output.',
+};
+const wide = product === 'deadbolt' ? [1400, 720] : [1200, 720];
+const mobile = product === 'deadbolt' ? [700, 820] : [700, 800];
+const tablet = product === 'deadbolt' ? wide : compactTablet ? mobile : [1000, 720];
+const base = `/art/products/${product}`;
+---
+<picture class="product-artwork">
+  <source media="(max-width: 600px)" srcset={`${base}-mobile.webp`} width={mobile[0]} height={mobile[1]} />
+  <source media="(max-width: 900px)" srcset={`${base}-${compactTablet ? 'mobile' : 'tablet'}.webp`} width={tablet[0]} height={tablet[1]} />
+  <img src={`${base}-desktop.webp`} width={wide[0]} height={wide[1]} alt={alts[product]} loading="lazy" decoding="async" />
+</picture>

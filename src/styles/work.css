@@ -1,4 +1,4 @@
-.work-opening { display: grid; grid-template-columns: 1fr 1fr; align-items: end; column-gap: 8vw; padding-top: 65px; padding-bottom: 75px; }
+.work-opening { display: grid; grid-template-columns: 1fr 1fr; align-items: center; column-gap: 8vw; padding-top: 65px; padding-bottom: 75px; }
 .work-opening h1 { font-family: 'Imbue', Georgia, serif; font-weight: 400; font-size: clamp(88px, 12vw, 184px); font-optical-sizing: auto; letter-spacing: -.01em; line-height: .88; }
 .work-opening > div { max-width: 45ch; padding-bottom: 5px; }
 .work-opening .b-lead { margin-bottom: 25px; }
@@ -14,7 +14,7 @@
 .work-project + .work-project { margin-top: 120px; }
 .work-page [data-work-panel][hidden] { display: none; }
 .work-page [data-work-browser][data-work-ready] .work-project { margin-top: 0; }
-.work-project-intro { display: grid; grid-template-columns: 1fr 1fr; align-items: end; column-gap: 8vw; margin-bottom: 42px; }
+.work-project-intro { display: grid; grid-template-columns: 1fr 1fr; align-items: center; column-gap: 8vw; margin-bottom: 42px; }
 .work-project-intro h2 { font-optical-sizing: auto; }
 .work-project-intro .b-lead { max-width: 34ch; }
 .work-visual { width: 100%; }

@@ -23,27 +23,27 @@ export const projects: readonly Project[] = [
   {
     id: 'flowdesk',
     name: 'FlowDesk',
-    introduction: 'A WhatsApp support project that took me from the inbox into the work happening behind it.',
+    introduction: 'A WhatsApp support workspace connecting team conversations, integrations and background processing.',
     notes: [
       {
         heading: 'The question',
         paragraphs: [
-          'A conversation starts in an inbox. A reply might involve an AI response, a person taking over, or work happening in the background. I wanted to follow how those pieces connect.',
-          'FlowDesk revisits the support problem I had explored in Wabrix, with a different set of building decisions.',
+          'How do you keep a shared inbox useful while messages, replies and assignment changes arrive at the same time?',
+          'FlowDesk brings those moving parts into one WhatsApp support workflow.',
         ],
       },
       {
         heading: 'The approach',
         paragraphs: [
-          'I used React and TypeScript for the interface, Express for the API and PostgreSQL for state. Incoming webhook events are stored and queued in an outbox for a separate worker.',
-          'That separation gave me more of the path to think about: what the interface asks for, where state belongs, and what work continues beyond a request.',
+          'The React and TypeScript interface talks to an Express API backed by PostgreSQL. Incoming WhatsApp events are stored before a separate worker processes them.',
+          'A transactional outbox connects saved events to background work, so message processing can continue beyond the incoming request.',
         ],
       },
       {
-        heading: 'The scope',
+        heading: 'The engineering',
         paragraphs: [
-          'A personal build, revisiting an earlier idea with a different architecture. The interface shown here is a reconstruction with fictional conversations and accounts.',
-          'The diagram explains the event-storage and background-processing path. The linked source shows the implementation behind that illustration.',
+          'Conversation assignment uses version checks: when two operators act on the same conversation, a stale update receives a conflict instead of overwriting the current owner.',
+          'That coordination between the inbox, stored state and workers is the engineering behind the interface.',
         ],
       },
     ],
@@ -52,32 +52,32 @@ export const projects: readonly Project[] = [
       { label: 'Event storage & outbox', url: 'https://github.com/ryanakml/flowdesk-ai/blob/e92d1030419cd5a6b13f8bb45dcb1adc9d98b300/packages/db/src/webhooks.ts#L34-L120' },
       { label: 'Worker processing', url: 'https://github.com/ryanakml/flowdesk-ai/blob/e92d1030419cd5a6b13f8bb45dcb1adc9d98b300/apps/worker/src/normalization.ts#L495-L577' },
     ],
-    related: { id: 'wabrix', label: 'Read about the earlier Wabrix exploration' },
+    related: { id: 'wabrix', label: 'See the Wabrix chatbot' },
   },
   {
     id: 'wabrix',
     name: 'Wabrix',
-    introduction: 'An earlier exploration of a shared WhatsApp inbox, AI replies and human handoff.',
+    introduction: 'A WhatsApp chatbot that answers from business knowledge and lets a team take over the conversation.',
     notes: [
       {
         heading: 'The question',
         paragraphs: [
-          'How could a WhatsApp conversation move between an AI response and a person who needs to take over? Wabrix was one way I explored that support workflow.',
-          'The same product territory later became a reason to try another route with FlowDesk.',
+          'How can a business automate routine WhatsApp questions without making it harder for a person to step in?',
+          'Wabrix keeps the assistant and the team in the same conversation, with shared history and controls for pausing the bot.',
         ],
       },
       {
         heading: 'The approach',
         paragraphs: [
-          'Wabrix uses Next.js for the interface, Convex for data and realtime updates, Clerk for identity, and Cloudflare Workers with Hono around webhooks.',
-          'Incoming events are stored in Convex, with scheduled functions processing inbound messages and statuses. FlowDesk takes a different route with PostgreSQL and outbox workers.',
+          'The assistant retrieves business knowledge to answer customer questions. Operators can read the conversation, pause automation and reply from the shared inbox.',
+          'Next.js provides the interface, Convex keeps conversation state in sync, Clerk handles identity, and Cloudflare Workers receive WhatsApp webhooks.',
         ],
       },
       {
-        heading: 'The scope',
+        heading: 'The engineering',
         paragraphs: [
-          'A personal project, presented here through its repository concept artwork with illustrative interface data.',
-          'Wabrix sits earlier in this exploration. FlowDesk follows the same support question with a different stack.',
+          'Incoming events are stored and processed in the background. Bot replies and operator replies share the outbound queue and delivery tracking.',
+          'Pausing the bot blocks new automated work while an operator handles the conversation. The handoff is part of the workflow, not a separate support channel.',
         ],
       },
     ],
@@ -86,32 +86,32 @@ export const projects: readonly Project[] = [
       { label: 'Webhook ingress', url: 'https://github.com/ryanakml/wabrix/blob/101002833ac75e262a8829c0e881ccce4e79771d/apps/ingress/src/whatsapp.ts#L118-L154' },
       { label: 'Event storage & scheduling', url: 'https://github.com/ryanakml/wabrix/blob/101002833ac75e262a8829c0e881ccce4e79771d/packages/backend/convex/whatsappWebhookEvents.ts#L97-L172' },
     ],
-    related: { id: 'flowdesk', label: 'Follow the idea into FlowDesk' },
+    related: { id: 'flowdesk', label: 'See the FlowDesk support workspace' },
   },
   {
     id: 'deadbolt',
     name: 'Deadbolt',
-    introduction: 'A workflow-runtime project with a friend, exploring worker ownership, leases and recovery.',
+    introduction: 'A distributed workflow engine for orchestrating workers, managing execution and recovering interrupted pipelines.',
     notes: [
       {
         heading: 'The question',
         paragraphs: [
-          'A worker is doing a job. Then it disappears. What should the system trust next, and which worker is still allowed to act?',
-          'Those questions bring me to ownership, leases, fencing and recovery rather than just the task at the end of a request.',
+          'A pipeline stops halfway through. How do you recover the interrupted work without repeating the steps that already finished?',
+          'Deadbolt coordinates dependencies and multiple workers, tracks execution attempts, and decides which tasks can run next.',
         ],
       },
       {
         heading: 'The approach',
         paragraphs: [
-          'Deadbolt explores workflow execution in Go and PostgreSQL. One part of the worker code tracks a local lease budget using elapsed time, a round-trip allowance and a safety margin.',
-          'The lease tests cover short TTLs, renewal and elapsed-time handling. The ownership illustration is conceptual; it is not a recorded execution.',
+          'A request creates a workflow run. Deadbolt uses PostgreSQL to track progress and coordinate tasks; workers execute the code and report results. The Inspector brings task state, attempts and worker progress into view.',
+          'Recovery keeps completed outputs and retries eligible work. When an external action has an unknown outcome, the system reconciles it before retrying.',
         ],
       },
       {
-        heading: 'The scope',
+        heading: 'The engineering',
         paragraphs: [
-          'Collaborative work with a friend, in active development. Work and authorship are shared.',
-          'The linked M4 implementation report provides a more recent development snapshot than the README. Release readiness and production reliability are not claimed here.',
+          'Built collaboratively with a friend through milestone M4, covering orchestration, multi-worker execution, execution management and recovery.',
+          'Leases and ownership checks keep execution coordinated when workers stop or lose contact. These mechanisms support the larger job: keeping a workflow moving from saved progress.',
         ],
       },
     ],

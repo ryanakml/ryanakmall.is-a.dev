@@ -33,7 +33,7 @@ Build output goes to `dist/`. Astro's managed preview can be stopped with `npx a
 | `src/styles/`, `src/scripts/` | Responsive editorial layout and progressive enhancements |
 | `src/assets/` | Project imagery optimized by Astro at build time |
 | `public/` | Original illustrations, font files/notices, favicon, social image and robots policy |
-| `artwork/` | Editable fictional-data FlowDesk interface illustration |
+| `artwork/` | Editable product figures, contribution illustration and font/license notices |
 | `docs/` | Approved decisions, evidence, asset provenance and maintenance/QA notes |
 | `AGENTS.md`, `phases/` | Project operating contract and progressive-disclosure workflow |
 

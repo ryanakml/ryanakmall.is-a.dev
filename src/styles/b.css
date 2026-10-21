@@ -47,12 +47,12 @@
 .b-button span:last-child { font-size: var(--b-lead); line-height: 1; }
 .b-work { padding-top: 80px; padding-bottom: 130px; }
 .concept-b h2 { font-family: 'Imbue', Georgia, serif; font-size: var(--b-head); line-height: .92; letter-spacing: -.01em; font-weight: 400; }
-.b-chapter-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: end; margin-bottom: 76px; }
+.b-chapter-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 5vw; align-items: center; margin-bottom: 76px; }
 .b-lead { font-size: var(--b-lead); line-height: 1.35; max-width: 34ch; }
-.b-work-spread { display: grid; gap: 4vw; align-items: end; }
+.b-work-spread { display: grid; gap: 4vw; align-items: center; }
 .b-wabrix { grid-template-columns: 1.55fr 1fr; }
 .b-flowdesk { grid-template-columns: 1fr 1.55fr; margin-top: 110px; }
-.b-work-copy { padding-bottom: 30px; }
+.b-work-copy { padding-bottom: 0; }
 .b-work-copy h3 { font-size: var(--b-lead); line-height: 1.05; letter-spacing: -.025em; font-weight: 500; margin-bottom: 24px; }
 .b-work-copy p { max-width: 38ch; }
 .b-work-copy > a { display: inline-block; margin-top: 24px; }
@@ -70,7 +70,7 @@
 .b-deeper summary:hover { color: var(--b-accent); }
 .b-deeper-content { padding: 0 20px 22px; font-size: var(--b-body); }
 .b-deadbolt { background: var(--b-ink); color: var(--b-bg); padding-top: 95px; padding-bottom: 75px; }
-.b-deadbolt-intro { display: grid; grid-template-columns: 1.1fr 1fr; gap: 8vw; align-items: start; margin-bottom: 65px; }
+.b-deadbolt-intro { display: grid; grid-template-columns: 1.1fr 1fr; gap: 8vw; align-items: center; margin-bottom: 65px; }
 .b-deadbolt-intro > div { max-width: 50ch; }
 .b-deadbolt-intro .b-lead { margin-bottom: 28px; }
 .b-deadbolt-intro .b-text-link { display: inline-block; margin-top: 24px; }
@@ -231,3 +231,10 @@
 .b-missing p { font-size: var(--b-lead); max-width: 26ch; }
 .b-missing .b-button { justify-self: start; }
 @media (max-width: 600px) { .b-missing { grid-template-columns: 1fr; padding-block: 60px 80px; } }
+
+/* Product figures own their responsive canvas; never force them into a second ratio. */
+.product-artwork { display: block; width: 100%; }
+.b-art-frame .product-artwork img,
+.work-visual .b-art-frame .product-artwork img { display: block; width: 100%; height: auto; max-width: none; aspect-ratio: auto; margin: 0; }
+.b-deadbolt-figure .product-artwork { width: 100%; }
+.b-lens [data-lens-panel="architecture"] .b-art-frame img { display: block; width: 100%; height: auto; aspect-ratio: auto; }

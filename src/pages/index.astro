@@ -1,13 +1,20 @@
 ---
 import Base from '../layouts/Base.astro';
-import { Image } from 'astro:assets';
-import wabrixArtwork from '../assets/wabrix-concept.png';
+import { getImage } from 'astro:assets';
+import heroMobile from '../assets/hero-mobile.png';
+import heroTablet from '../assets/hero-tablet.png';
+import heroDesktop from '../assets/hero-desktop.png';
+import ProductArtwork from '../components/ProductArtwork.astro';
 import ProjectLens from '../components/ProjectLens.astro';
 import '../styles/b.css';
 
 import { contributions } from '../data/contributions';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+
+const [mobileHero, tabletHero, desktopHero] = await Promise.all(
+  [heroMobile, heroTablet, heroDesktop].map(src => getImage({ src, width: 1000, format: 'webp', quality: 85 }))
+);
 ---
 
 <Base title="Ryan Akmal · Thinking out loud" description="Software, questions, and a little of the person behind them. The personal home of Ryan Akmal Pasya." bodyClass="concept-b">
@@ -19,7 +26,11 @@ import SiteFooter from '../components/SiteFooter.astro';
         <span class="b-title-first" data-b-load>Thinking</span>
         <span class="b-title-second" data-b-load>
           <span>out</span>
-          <span class="b-inline-picture" aria-hidden="true"><img src="/art/flowdesk.png" alt="" width="1400" height="1000" fetchpriority="high" /></span>
+          <picture class="b-inline-picture" aria-hidden="true">
+            <source media="(max-width: 600px)" srcset={mobileHero.src} type="image/webp" />
+            <source media="(max-width: 900px)" srcset={tabletHero.src} type="image/webp" />
+            <img src={desktopHero.src} alt="" width="1000" height="400" fetchpriority="high" />
+          </picture>
           <span>loud</span>
         </span>
       </h1>
@@ -32,17 +43,17 @@ import SiteFooter from '../components/SiteFooter.astro';
     <section id="work" class="b-work b-frame" aria-labelledby="b-work-title">
       <div class="b-chapter-intro">
         <h2 id="b-work-title" data-b-reveal="title">One idea,<br />two builds</h2>
-        <p class="b-lead" data-b-reveal="text">I explored WhatsApp support in Wabrix, then took another route with FlowDesk. Same problem, different building decisions.</p>
+        <p class="b-lead" data-b-reveal="text">Two approaches to WhatsApp support: Wabrix connects a chatbot with a shared inbox; FlowDesk brings conversations, integrations and background work together.</p>
       </div>
 
       <article class="b-wabrix b-work-spread" aria-labelledby="b-wabrix-title">
         <figure class="b-work-figure" data-b-reveal="picture">
-          <div class="b-art-frame"><Image src={wabrixArtwork} widths={[480, 800, 1200, 1881]} sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 900px) 45vw, 58vw" format="webp" quality={85} alt="Wabrix repository concept artwork depicting a WhatsApp chat and inbox with illustrative dashboard data" loading="lazy" /></div>
-          <figcaption>Wabrix · Repository concept artwork with sample interface data</figcaption>
+          <div class="b-art-frame"><ProductArtwork product="wabrix" /></div>
+          <figcaption>Wabrix · Knowledge-backed replies and human takeover</figcaption>
         </figure>
         <div class="b-work-copy">
           <h3 id="b-wabrix-title" data-b-reveal="title">Wabrix</h3>
-          <p data-b-reveal="text">An inbox experiment bringing WhatsApp, AI responses and human handoff together. Built with Next.js, Convex, Clerk and Cloudflare Workers.</p>
+          <p data-b-reveal="text">A WhatsApp chatbot that answers from business knowledge. Your team can pause the bot and take over in the same conversation.</p>
           <a class="b-text-link" href="/work/#wabrix" data-b-reveal="text">Explore Wabrix</a>
         </div>
       </article>
@@ -50,13 +61,13 @@ import SiteFooter from '../components/SiteFooter.astro';
       <article class="b-flowdesk b-work-spread" aria-labelledby="b-flowdesk-title">
         <div class="b-work-copy">
           <h3 id="b-flowdesk-title" data-b-reveal="title">FlowDesk</h3>
-          <p data-b-reveal="text">The support idea revisited with React, Express and PostgreSQL. This time, the work behind the inbox includes background processing and a transactional outbox.</p>
+          <p data-b-reveal="text">A WhatsApp support workspace with team conversations and working integrations. Behind the inbox, stored events and background workers keep messages moving.</p>
           <a class="b-text-link" href="/work/#flowdesk" data-b-reveal="text">Explore FlowDesk</a>
           <details class="b-deeper" data-b-reveal="text">
             <summary>A little deeper <span class="b-details-mark" aria-hidden="true">+</span></summary>
             <div class="b-deeper-content">
-              <p>Wabrix uses Convex for its data and realtime layer. FlowDesk puts an Express API and PostgreSQL behind the interface, with background work handled separately. Similar product territory, different building decisions.</p>
-              <p>Both are personal projects, with different architecture choices around the same support workflow.</p>
+              <p>FlowDesk stores incoming WhatsApp events in PostgreSQL and uses a transactional outbox to pass work to a separate worker. The interface stays focused on conversations while processing continues in the background.</p>
+              <p>Version checks protect conversation assignment when two operators act at once.</p>
             </div>
           </details>
         </div>
@@ -70,17 +81,17 @@ import SiteFooter from '../components/SiteFooter.astro';
     <section class="b-deadbolt" aria-labelledby="b-deadbolt-title">
       <div class="b-frame">
         <div class="b-deadbolt-intro">
-          <h2 id="b-deadbolt-title" data-b-reveal="title">Who owns<br />the work?</h2>
+          <h2 id="b-deadbolt-title" data-b-reveal="title">Work that<br />keeps moving</h2>
           <div data-b-reveal="text">
-            <p class="b-lead">A different question, this time with a friend.</p>
-            <p>Deadbolt explores workflow execution in Go and PostgreSQL: worker ownership, leases and recovery when the process doing the work stops.</p>
-            <p>It's collaborative work in active development. The repository includes worker code, tests and ongoing implementation notes.</p>
+            <p class="b-lead">A workflow engine, built with a friend.</p>
+            <p>Deadbolt orchestrates pipelines across multiple workers. Inspect progress, manage execution and recover interrupted work without restarting completed steps.</p>
+            <p>Implemented through milestone M4 in Go and PostgreSQL, with orchestration, execution management and recovery mechanisms.</p>
             <a class="b-text-link" href="/work/#deadbolt">Explore Deadbolt</a>
           </div>
         </div>
         <figure class="b-deadbolt-figure" data-b-reveal="picture">
-          <div class="b-art-frame"><img src="/art/deadbolt.png" alt="Editorial illustration of the worker-ownership questions explored by Deadbolt" width="1400" height="1000" loading="lazy" /></div>
-          <figcaption>Deadbolt · Conceptual illustration of worker ownership</figcaption>
+          <div class="b-art-frame"><ProductArtwork product="deadbolt" /></div>
+          <figcaption>Deadbolt · Worker execution and recovery from saved progress</figcaption>
         </figure>
       </div>
     </section>
@@ -88,12 +99,12 @@ import SiteFooter from '../components/SiteFooter.astro';
     <section id="contributions" class="b-contributions b-frame" aria-labelledby="b-contributions-title">
       <div class="b-contribution-top">
         <h2 id="b-contributions-title" data-b-reveal="title">In good<br />company</h2>
-        <p class="b-lead" data-b-reveal="text">I also like finding my way around someone else's code. A few contributions that made it in.</p>
+        <p class="b-lead" data-b-reveal="text">I also work in other people's codebases. A few fixes and documentation changes merged upstream.</p>
       </div>
       <div class="b-contribution-body">
         <figure class="b-contribution-figure" data-b-reveal="picture">
-          <div class="b-art-frame"><img src="/art/contribution.png" alt="Editorial illustration of the Celery contribution: expanding the tilde character into a home-directory path" width="1400" height="1000" loading="lazy" /></div>
-          <figcaption>The Celery contribution · Original editorial artwork</figcaption>
+          <div class="b-art-frame"><img src="/art/products/celery.webp" alt="Editorial illustration of the Celery contribution: expanding the tilde character into a home-directory path" width="1400" height="1000" loading="lazy" /></div>
+          <figcaption>Celery · Resolving home-directory paths before worker startup</figcaption>
         </figure>
         <div class="b-contribution-list">
           {contributions.map((item) => (
@@ -111,15 +122,14 @@ import SiteFooter from '../components/SiteFooter.astro';
       <h2 id="b-about-title" data-b-reveal="title">A little<br />about me</h2>
       <div class="b-about-body">
         <div class="b-about-main" data-b-reveal="text">
-          <p>I like following a feature past the interface: into the database, through background work, and into the awkward failure cases.</p>
-          <p>I've learned independently, moving from data analysis through machine learning, LLMs and MLOps into fullstack development.</p>
+          <p>I like following a feature beyond the interface: into the data, the background work, and what happens when something goes wrong.</p>
+          <p>I've learned independently, from data analysis and machine learning to LLMs, MLOps and full-stack development.</p>
         </div>
         <div class="b-about-side">
-          <p class="b-process" data-b-reveal="text">I build personal projects and contribute fixes and documentation upstream. Deadbolt is a collaboration with a friend. AI is a substantial part of how I plan, implement and review software.</p>
+          <p class="b-process" data-b-reveal="text">I build personal projects, collaborate with friends and contribute upstream. I use AI as part of how I plan, build and review software.</p>
           <div class="b-aside" data-b-reveal="text">
-            <p>Also, I think out loud. Literally.</p>
-            <blockquote lang="id"><span data-b-reveal="thought">“ah gabisa gini</span><span data-b-reveal="thought" data-thought-pause>ohh gituu”</span></blockquote>
-            <p>Usually to myself. That's how a lot of the thinking happens.</p>
+            <p>I like conversations that start with “what if?” and end somewhere neither of us expected.</p>
+            <p>Explaining an idea often helps me see what I missed. So does a good question from someone else.</p>
           </div>
         </div>
       </div>

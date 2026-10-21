@@ -1,0 +1,124 @@
+{
+  "width": 1400,
+  "height": 1000,
+  "ground": "#f7f9fa",
+  "surface": "#ecf0f2",
+  "ink": "#1f3038",
+  "muted": "#42535c",
+  "teal": "#0d7480",
+  "hostFooter": "#dce8ea",
+  "font": "Albert Sans",
+  "weight": 500,
+  "fixture": {
+    "HOME": "/home/demo",
+    "workdir": "~/tmp"
+  },
+  "rects": [
+    {
+      "x": 80,
+      "y": 160,
+      "width": 1240,
+      "height": 140
+    },
+    {
+      "x": 80,
+      "y": 370,
+      "width": 1240,
+      "height": 220
+    },
+    {
+      "x": 80,
+      "y": 650,
+      "width": 1240,
+      "height": 270
+    }
+  ],
+  "arrows": [
+    {
+      "x1": 395,
+      "y": 470,
+      "x2": 525,
+      "color": "ink"
+    },
+    {
+      "x1": 395,
+      "y": 785,
+      "x2": 525,
+      "color": "teal"
+    }
+  ],
+  "texts": [
+    {
+      "id": "context",
+      "x": 80,
+      "y": 110,
+      "size": 70,
+      "value": "celery multi",
+      "color": "ink"
+    },
+    {
+      "id": "fixture",
+      "x": 650,
+      "y": 110,
+      "size": 70,
+      "value": "HOME=/home/demo",
+      "color": "muted"
+    },
+    {
+      "id": "input",
+      "x": 120,
+      "y": 254,
+      "size": 72,
+      "value": "--workdir=\"~/tmp\"",
+      "color": "ink"
+    },
+    {
+      "id": "before",
+      "x": 120,
+      "y": 493,
+      "size": 72,
+      "value": "Before",
+      "color": "ink"
+    },
+    {
+      "id": "literal",
+      "x": 590,
+      "y": 453,
+      "size": 72,
+      "value": "~/tmp",
+      "color": "ink"
+    },
+    {
+      "id": "failure",
+      "x": 590,
+      "y": 550,
+      "size": 70,
+      "value": "FileNotFoundError",
+      "color": "muted"
+    },
+    {
+      "id": "after",
+      "x": 120,
+      "y": 808,
+      "size": 72,
+      "value": "After",
+      "color": "teal"
+    },
+    {
+      "id": "function",
+      "x": 590,
+      "y": 730,
+      "size": 70,
+      "value": "os.path.expanduser",
+      "color": "teal"
+    },
+    {
+      "id": "expanded",
+      "x": 590,
+      "y": 835,
+      "size": 72,
+      "value": "/home/demo/tmp",
+      "color": "ink"
+    }
+  ]
+}

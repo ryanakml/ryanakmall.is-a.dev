@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1250" height="760" viewBox="75 140 1250 760" role="img" aria-labelledby="title description">
+  <title id="title">Version-checked ownership of a FlowDesk conversation</title>
+  <desc id="description">Jamie and Taylor each claim Alex Morgan's unassigned conversation using version one. In this fictional ordering, Jamie's claim updates the owner to Jamie and version two; Taylor's stale claim receives a 409 conflict and a reload option.</desc>
+  <style>
+    @font-face { font-family: "Albert Sans"; src: url("./fonts/AlbertSans.ttf") format("truetype"); font-weight: 400 500; }
+    text { font-family: "Albert Sans", Arial, sans-serif; fill:#1f3038; }
+    .name { font-size:66px; font-weight:500; letter-spacing:-1.5px; }
+    .action { font-size:64px; font-weight:400; }
+    .state { font-size:64px; font-weight:500; }
+    .secondary { fill:#42535c; }
+    .accent { fill:#0d7480; }
+    .small { font-size:64px; font-weight:400; }
+    .line { fill:none; stroke:#42535c; stroke-width:5; stroke-linecap:square; stroke-linejoin:miter; }
+    .teal-line { fill:none; stroke:#0d7480; stroke-width:7; stroke-linecap:square; }
+  </style>
+  <defs>
+    <marker id="arrow-ink" markerWidth="13" markerHeight="13" refX="10" refY="6.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L12 6.5 L0 13" fill="none" stroke="#42535c" stroke-width="3"/></marker>
+    <marker id="arrow-teal" markerWidth="13" markerHeight="13" refX="10" refY="6.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L12 6.5 L0 13" fill="none" stroke="#0d7480" stroke-width="3"/></marker>
+  </defs>
+  <rect width="1400" height="1000" fill="#f7f9fa"/>
+
+  <!-- Two operators act from the same observed version. -->
+  <text class="name" x="105" y="308">Jamie</text>
+  <text class="action secondary" x="105" y="397">Claim · v1</text>
+  <text class="name" x="1010" y="308">Taylor</text>
+  <text class="action secondary" x="1010" y="397">Claim · v1</text>
+  <path class="line" d="M105 438 H430 V467 H466" marker-end="url(#arrow-ink)"/>
+  <path class="line" d="M1295 438 H970 V467 H934" marker-end="url(#arrow-ink)"/>
+
+  <!-- One shared conversation is the visual anchor. -->
+  <rect x="474" y="170" width="452" height="660" fill="#ecf0f2"/>
+  <text class="name" x="514" y="269">Alex Morgan</text>
+  <line x1="514" y1="303" x2="886" y2="303" stroke="#becbd0" stroke-width="4"/>
+  <text class="state secondary" x="514" y="392">v1</text>
+  <text class="state" x="514" y="476">Unassigned</text>
+  <path class="teal-line" d="M700 518 V594" marker-end="url(#arrow-teal)"/>
+  <text class="state accent" x="514" y="682">v2</text>
+  <text class="state" x="514" y="766">Jamie</text>
+
+  <!-- Outcomes stay attached to the operators, not a fabricated service topology. -->
+  <line x1="105" y1="612" x2="422" y2="612" stroke="#0d7480" stroke-width="5"/>
+  <text class="small accent" x="105" y="709">Accepted</text>
+  <line x1="978" y1="612" x2="1295" y2="612" stroke="#42535c" stroke-width="5"/>
+  <text class="small" x="978" y="709">409</text>
+  <text class="small" x="978" y="789">Conflict</text>
+  <text class="small secondary" x="978" y="869">Reload</text>
+</svg>

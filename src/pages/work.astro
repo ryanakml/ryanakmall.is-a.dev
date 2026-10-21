@@ -1,11 +1,11 @@
 ---
-import { Image } from 'astro:assets';
+
 import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import ProjectLens from '../components/ProjectLens.astro';
-import wabrixArtwork from '../assets/wabrix-concept.png';
-import flowdeskArtwork from '../assets/flowdesk-interface.png';
+import ProductArtwork from '../components/ProductArtwork.astro';
+
 import { contributions } from '../data/contributions';
 import { projects } from '../data/projects';
 import '../styles/b.css';
@@ -42,18 +42,18 @@ import '../styles/work.css';
 
             <figure class="work-visual b-work-figure" data-work-visual data-b-reveal="picture">
               {project.id === 'flowdesk' ? (
-                <ProjectLens sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 900px) calc(100vw - 48px), (max-width: 1600px) calc(100vw - 56px), 1544px" />
+                <ProjectLens context="work" sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 900px) calc(100vw - 48px), (max-width: 1600px) calc(100vw - 56px), 1544px" />
               ) : project.id === 'wabrix' ? (
                 <>
                   <div class="b-art-frame work-wabrix-art">
-                    <Image src={wabrixArtwork} widths={[480, 800, 1200, 1800]} sizes="(max-width: 600px) calc(100vw - 40px), (max-width: 900px) calc(100vw - 48px), (max-width: 1600px) calc(100vw - 56px), 1544px" format="webp" quality={85} alt="Wabrix repository concept artwork depicting a WhatsApp inbox with illustrative interface data" width={1881} height={836} loading="lazy" />
+                    <ProductArtwork product="wabrix" context="work" />
                   </div>
-                  <figcaption>Wabrix · Repository concept artwork with sample interface data</figcaption>
+                  <figcaption>Wabrix · Knowledge-backed replies and human takeover</figcaption>
                 </>
               ) : (
                 <>
-                  <div class="b-art-frame work-deadbolt-art"><img src="/art/deadbolt.png" alt="Conceptual Deadbolt illustration: an earlier worker claim stops at a fence while a current ownership claim continues" width="1400" height="1000" loading="lazy" /></div>
-                  <figcaption>Deadbolt · Conceptual illustration of worker ownership</figcaption>
+                  <div class="b-art-frame work-deadbolt-art"><ProductArtwork product="deadbolt" context="work" /></div>
+                  <figcaption>Deadbolt · Worker execution and recovery from saved progress</figcaption>
                 </>
               )}
             </figure>
@@ -64,8 +64,7 @@ import '../styles/work.css';
                   <h3 data-b-reveal="title">{note.heading}</h3>
                   <div data-b-reveal="text">
                     {note.paragraphs.map(paragraph => <p>{paragraph}</p>)}
-                    {note.heading === 'The scope' && <>
-                      <p class="work-verification">Source reviewed. Runtime not independently tested.</p>
+                    {note.heading === 'The engineering' && <>
                       <nav class="work-evidence" aria-label={`${project.name} technical evidence`}>
                         {project.evidence.map(item => <a class="b-text-link" href={item.url}>{item.label}</a>)}
                       </nav>
@@ -84,24 +83,24 @@ import '../styles/work.css';
     <section class="work-more b-frame" aria-labelledby="more-work-title">
       <div class="work-more-intro">
         <h2 id="more-work-title" data-b-reveal="title">Other threads</h2>
-        <p data-b-reveal="text">Another build, another question. Or a small change in someone else's code.</p>
+        <p data-b-reveal="text">More projects and contributions to explore.</p>
       </div>
       <div class="work-more-gallery">
         <article data-work-related="flowdesk" data-b-reveal="picture">
-          <a href="#flowdesk"><Image src={flowdeskArtwork} widths={[480, 800]} sizes="(max-width: 600px) calc(100vw - 40px), 32vw" format="webp" alt="FlowDesk inbox reconstruction with fictional data" loading="lazy" /><h3>FlowDesk</h3></a>
-          <p class="work-thumbnail-source">Interface reconstruction · Fictional demo data</p>
+          <a href="#flowdesk"><ProductArtwork product="flowdesk" context="thumbnail" /><h3>FlowDesk</h3></a>
+          <p class="work-thumbnail-source">WhatsApp support · AI-assisted replies</p>
         </article>
         <article data-work-related="wabrix" data-b-reveal="picture">
-          <a href="#wabrix"><Image src={wabrixArtwork} widths={[480, 800]} sizes="(max-width: 600px) calc(100vw - 40px), 32vw" format="webp" alt="Wabrix repository concept artwork with illustrative data" loading="lazy" /><h3>Wabrix</h3></a>
-          <p class="work-thumbnail-source">Repository concept artwork · Sample data</p>
+          <a href="#wabrix"><ProductArtwork product="wabrix" context="work" /><h3>Wabrix</h3></a>
+          <p class="work-thumbnail-source">WhatsApp chatbot · Human takeover</p>
         </article>
         <article data-work-related="deadbolt" data-b-reveal="picture">
-          <a href="#deadbolt"><img src="/art/deadbolt.png" width="1400" height="1000" loading="lazy" alt="Conceptual illustration of Deadbolt worker ownership" /><h3>Deadbolt</h3></a>
-          <p class="work-thumbnail-source">Conceptual illustration · Collaborative project</p>
+          <a href="#deadbolt"><ProductArtwork product="deadbolt" context="work" /><h3>Deadbolt</h3></a>
+          <p class="work-thumbnail-source">Distributed workflows · Collaborative project</p>
         </article>
         <article data-b-reveal="picture">
-          <a href="/#contributions"><img src="/art/contribution.png" width="1400" height="1000" loading="lazy" alt="Editorial illustration of the Celery path-expansion contribution" /><h3>Upstream</h3></a>
-          <p class="work-thumbnail-source">Editorial illustration · Celery path fix</p>
+          <a href="/#contributions"><img src="/art/products/celery.webp" width="1400" height="1000" loading="lazy" alt="Editorial illustration of the Celery path-expansion contribution" /><h3>Upstream</h3></a>
+          <p class="work-thumbnail-source">Celery · Worker path expansion</p>
           <div class="work-upstream-links">{contributions.map(item => <a href={item.url}>{item.name}</a>)}</div>
         </article>
       </div>

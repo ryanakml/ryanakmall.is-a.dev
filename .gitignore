@@ -51,3 +51,6 @@ __pycache__/
 # Historical prototype helpers and unused duplicate artwork.
 /scripts/verify-prototypes.mjs
 /public/art/wabrix.png
+
+# Incoming asset packets and reference drafts; selected assets live in artwork/ and public/.
+/generated-assets-new/
