@@ -60,12 +60,14 @@ The selected Celery source and specification are retained in `artwork/oss/`, inc
 
 ## Final Deadbolt visual assets — 2026-10-21
 
-Owner supplied six finalized PNGs in the local folder `generated-assets-new/daedbolt-final/` (actual spelling). Unchanged source copies are retained in `src/assets/deadbolt-final/`; Astro generates responsive WebP deliveries at up to native width. These are owner-supplied product visuals; no independent capture/model attribution is inferred.
+Owner supplied six finalized PNGs in the local folder `generated-assets-new/daedbolt-final/` (actual spelling). Four remain as unchanged source copies in `src/assets/deadbolt-final/`; Astro generates responsive WebP deliveries at up to native width. These are owner-supplied product visuals; no independent capture/model attribution is inferred.
+
+On 2026-11-19 the owner supplied background-removed WebP revisions for the two home compositions. Those files now replace the baked-background PNGs, letting the existing `#233740` figure surface show through; the four other Deadbolt placements are unchanged.
 
 | Placement | Source files |
 | --- | --- |
-| Home desktop/tablet | `main-wide.png` (1942×809) |
-| Home mobile | `home-mobile.png` (1145×1374) |
+| Home desktop/tablet | `main-wide.webp` (1942×809, alpha) |
+| Home mobile | `home-mobile.webp` (960×1152, alpha) |
 | Work featured desktop | `work-desktop.png` (1774×887) |
 | Work featured tablet | `work-tablet.png` (1448×1086) |
 | Work featured mobile | `work-mobile.png` (1122×1402) |
