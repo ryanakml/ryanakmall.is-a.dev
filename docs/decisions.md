@@ -60,3 +60,7 @@ Owner permits fictional demo data and faithful reconstructed showcases of actual
 - Owner requested final FlowDesk Interface, Behind it and Other Threads imagery across Home and Work, following the established responsive image approach. Actual incoming folder is `generated-assets-new/flowdesk-final/`.
 - Home selects its desktop/tablet or mobile Interface; Work selects desktop/tablet/mobile Interface; both use desktop/tablet or mobile Behind it; Other Threads uses one preview. Existing component, lens controls, image containers and CSS suffice. Responsive full-image links open the shown variant. Obsolete served FlowDesk variants were removed.
 - Browser QA passed all 15 placement/viewport combinations at 1440/768/390: correct source, decoded image, native full-image proportions, thumbnail containment, working controls/links and no overflow. Screenshots were reviewed. Astro check/build and Taste source lint passed. No push/deployment requested.
+
+### 2026-11-21 — direct push workflow to main
+
+- Owner explicitly confirmed and authorized direct-to-main push workflow for ongoing and future iterations in this workspace. All verified updates are directly integrated and pushed to origin main.
