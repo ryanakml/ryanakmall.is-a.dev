@@ -64,3 +64,5 @@ Owner permits fictional demo data and faithful reconstructed showcases of actual
 ### 2026-11-21 — direct push workflow to main
 
 - Owner explicitly confirmed and authorized direct-to-main push workflow for ongoing and future iterations in this workspace. All verified updates are directly integrated and pushed to origin main.
+- Replaced `public/documents/Ryan-Akmal-Pasya-CV.pdf` with the updated owner-supplied CV PDF.
+- Updated `.b-deadbolt-figure .b-art-frame` background to `transparent` so the background-removed Deadbolt visual unifies seamlessly with the section container (`var(--b-ink)`).

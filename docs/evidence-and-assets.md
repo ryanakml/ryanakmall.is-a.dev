@@ -54,7 +54,7 @@ Current Home/Work figures use `public/art/products/`, with editable sources and 
 
 The owner explicitly confirms functioning Wabrix bot features, functional FlowDesk integrations/backend systems and Deadbolt implementation through M4. Public copy uses that confirmation and the documented architecture instead of treating absence of an agent runtime rerun as a product limitation. The UI figures remain editorial presentations; their method/provenance stays documented here without repeatedly qualifying the projects on public pages. Collaboration credit and specific recovery semantics remain accurate.
 
-`public/documents/Ryan-Akmal-Pasya-CV.pdf` is an unchanged copy of the existing global CV supplied by the owner. Source and served copy SHA-256: `4bb2bfff36f504377ab5802ae2c6299cdb5a521198fb4d0d496a726c37bf929c`. It is linked from the shared footer as Résumé (PDF), with no replacement CV generated.
+`public/documents/Ryan-Akmal-Pasya-CV.pdf` is an unchanged copy of the existing global CV supplied by the owner. Source and served copy SHA-256: `f691a1551569fc4f6fb7b55794ddedf592943b34e894afba5b9f3f9df08f2d68`. It is linked from the shared footer and header as Résumé (PDF), with no replacement CV generated.
 
 The selected Celery source and specification are retained in `artwork/oss/`, including the supplied Celery and Albert Sans notices. The visual describes [Celery PR #10739](https://github.com/celery/celery/pull/10739): home-directory expansion for worker paths. `/home/demo` is an illustration fixture, not a real customer path. Raw incoming asset packets remain local; selected production files and editable sources are published.
 
@@ -62,7 +62,7 @@ The selected Celery source and specification are retained in `artwork/oss/`, inc
 
 Owner supplied six finalized PNGs in the local folder `generated-assets-new/daedbolt-final/` (actual spelling). Four remain as unchanged source copies in `src/assets/deadbolt-final/`; Astro generates responsive WebP deliveries at up to native width. These are owner-supplied product visuals; no independent capture/model attribution is inferred.
 
-On 2026-11-19 the owner supplied background-removed WebP revisions for the two home compositions. Those files now replace the baked-background PNGs, letting the existing `#233740` figure surface show through; the four other Deadbolt placements are unchanged.
+On 2026-11-19 the owner supplied background-removed WebP revisions for the two home compositions. Those files replaced the baked-background PNGs. On 2026-11-21, `.b-deadbolt-figure .b-art-frame` background was set to transparent so the background-removed visuals blend seamlessly with the section container (`var(--b-ink)`); the four other Deadbolt placements are unchanged.
 
 | Placement | Source files |
 | --- | --- |

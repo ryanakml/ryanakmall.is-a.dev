@@ -75,7 +75,7 @@
 .b-deadbolt-intro .b-lead { margin-bottom: 28px; }
 .b-deadbolt-intro .b-text-link { display: inline-block; margin-top: 24px; }
 .b-deadbolt .b-text-link:hover { color: #c7e5e8; }
-.b-deadbolt-figure .b-art-frame { background: #233740; display: grid; place-items: center; }
+.b-deadbolt-figure .b-art-frame { background: transparent; display: grid; place-items: center; }
 .b-deadbolt-figure img { width: min(100%, 1000px); object-fit: contain; }
 .b-deadbolt figcaption { color: #c2cdd0; }
 .b-contributions { padding-top: 135px; padding-bottom: 135px; }
