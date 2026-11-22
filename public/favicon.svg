@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Forest Charcoal rounded square frame -->
+  <rect width="64" height="64" rx="15" fill="#262d29" />
+  <!-- Butter Paper architectural 'r' stem & V-branch -->
+  <path
+    d="M21 48V20M21 31C21 24.5 26.2 20 33.5 20H36"
+    stroke="#f7f6e3"
+    stroke-width="5.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <path
+    d="M21 38L34 48"
+    stroke="#f7f6e3"
+    stroke-width="5"
+    stroke-linecap="round"
+  />
+  <!-- Hot Orange organic seed blob at the upper-right branch tip -->
+  <path
+    d="M44.2 14.3C48.8 14.0 52.4 17.5 52.6 22.2C52.8 26.9 49.1 30.8 44.4 31.0C39.7 31.2 35.9 27.6 35.7 22.8C35.5 18.0 39.6 14.6 44.2 14.3Z"
+    fill="#fb5e00"
+  />
+  <!-- Acid Yellow micro node dot -->
+  <circle cx="43.5" cy="46.5" r="3.5" fill="#ffff48" />
+</svg>
