@@ -76,6 +76,7 @@ body::before {
   pointer-events: none;
   z-index: 9999;
   opacity: 0.022;
+  transform: translateZ(0);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
@@ -233,7 +234,9 @@ input {
   height: 100px;
   margin-left: -50px;
   margin-top: -50px;
+  transform-origin: 50% 50%;
   will-change: transform, opacity;
+  pointer-events: none;
 }
 
 .intro-floating-word {
@@ -315,7 +318,12 @@ input {
   position: absolute;
   top: 0;
   left: 0;
-  will-change: transform, opacity;
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  contain: layout paint style;
 }
 
 @keyframes seedFloatA {
@@ -978,6 +986,8 @@ input {
   position: relative;
   z-index: 10;
   padding-bottom: var(--step-16);
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
 }
 
 .ruled-header {
@@ -1948,6 +1958,8 @@ input {
   align-items: center;
   justify-content: center;
   text-align: center;
+  content-visibility: auto;
+  contain-intrinsic-size: 752px;
 }
 
 .isolated-quote-inner {
@@ -2014,6 +2026,8 @@ input {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  content-visibility: auto;
+  contain-intrinsic-size: 877px;
 }
 
 .footer-inner {

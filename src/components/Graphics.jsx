@@ -16,7 +16,7 @@ export const SEED_PATHS = [
 
 export function OrganicSeedBlob({
   variant = 0,
-  size = 44,
+  size,
   color = '#fb5e00',
   className = '',
   style = {},
@@ -24,13 +24,17 @@ export function OrganicSeedBlob({
   const path = SEED_PATHS[variant % SEED_PATHS.length];
   return (
     <svg
-      width={size}
-      height={size}
       viewBox="0 0 100 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      style={{ display: 'block', ...style }}
+      style={{
+        display: 'block',
+        width: size ? `${size}px` : '100%',
+        height: size ? `${size}px` : '100%',
+        shapeRendering: 'geometricPrecision',
+        ...style,
+      }}
       aria-hidden="true"
     >
       <path d={path} fill={color} />

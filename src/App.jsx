@@ -437,29 +437,167 @@ function RuledSectionIntro({
   );
 }
 
+/**
+ * Isolated GPU-accelerated Scroll & Spore Bloom Seed Layer.
+ * - During Stage 4: Spores burst outwards from screen center (vw * 0.5, vh * 0.5)
+ *   purely using hardware composite transforms (translate3d + scale).
+ * - On scroll: Computes dock trajectory on RAF and updates only seed transforms,
+ *   COMPLETELY bypassing full-page App re-renders.
+ */
+function ScrollSeedLayer({
+  isBurstStarted,
+  introRunId,
+  vw,
+  vh,
+  emblemTargetRef,
+  onBranchProgress,
+}) {
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    let rafId = null;
+    let lastBranchP = -1;
+
+    const onScroll = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        const scrollY = window.scrollY;
+        let emblemDocY = vh * 1.65;
+        if (emblemTargetRef.current) {
+          const rect = emblemTargetRef.current.getBoundingClientRect();
+          emblemDocY = rect.top + window.scrollY + rect.height / 2;
+        }
+        const dockScrollY = Math.max(360, emblemDocY - vh * 0.53);
+        const progress = Math.max(0, Math.min(1, scrollY / dockScrollY));
+        setScrollProgress(progress);
+
+        if (onBranchProgress) {
+          const branchP =
+            progress < 0.48 ? 0 : Math.min(1, (progress - 0.48) / 0.46);
+          if (
+            Math.abs(branchP - lastBranchP) > 0.008 ||
+            branchP === 1 ||
+            branchP === 0
+          ) {
+            lastBranchP = branchP;
+            onBranchProgress(branchP);
+          }
+        }
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      if (rafId) window.cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, [vh, emblemTargetRef, onBranchProgress]);
+
+  let emblemDocX = vw / 2;
+  let emblemDocY = vh * 1.65;
+  if (emblemTargetRef.current) {
+    const rect = emblemTargetRef.current.getBoundingClientRect();
+    emblemDocX = rect.left + window.scrollX + rect.width / 2;
+    emblemDocY = rect.top + window.scrollY + rect.height / 2;
+  }
+
+  const centerX = vw * 0.5;
+  const centerY = vh * 0.5;
+
+  return (
+    <div className="scroll-seeds-document-layer" aria-hidden="true">
+      {HERO_SEEDS.map((seed, idx) => {
+        const tip = EMBLEM_TIP_OFFSETS[idx];
+        const heroDocX = seed.heroX * vw;
+        const heroDocY = seed.heroY * vh;
+        const targetDocX = emblemDocX + tip.dx;
+        const targetDocY = emblemDocY + tip.dy;
+
+        const staggeredP = Math.max(
+          0,
+          Math.min(1, Math.pow(scrollProgress, 0.92 + (idx % 3) * 0.08))
+        );
+        const easeX = easeInOutCubic(staggeredP);
+        const easeY = easeInOutQuad(staggeredP);
+
+        const currentDocX = heroDocX + (targetDocX - heroDocX) * easeX;
+        const currentDocY = heroDocY + (targetDocY - heroDocY) * easeY;
+        const currentSize = seed.size + (tip.size - seed.size) * easeX;
+
+        return (
+          <motion.div
+            key={`seed-${seed.id}-${introRunId}`}
+            className="scroll-seed-item"
+            initial={{
+              x: centerX - 50,
+              y: centerY - 50,
+              scale: 0.44,
+              opacity: 0,
+            }}
+            animate={
+              isBurstStarted
+                ? {
+                    x: currentDocX - 50,
+                    y: currentDocY - 50,
+                    scale: currentSize / 100,
+                    opacity: 1,
+                  }
+                : {
+                    x: centerX - 50,
+                    y: centerY - 50,
+                    scale: 0.44,
+                    opacity: 0,
+                  }
+            }
+            transition={
+              scrollProgress > 0.01
+                ? { duration: 0.05, ease: 'linear' }
+                : {
+                    duration: 0.85,
+                    delay: idx * 0.02,
+                    ease: EASE_MORPH,
+                    opacity: { duration: 0.2 },
+                  }
+            }
+          >
+            <div
+              className={
+                scrollProgress < 0.85 ? `seed-drift-${seed.id}` : ''
+              }
+              style={{ width: '100%', height: '100%' }}
+            >
+              <OrganicSeedBlob variant={seed.variant} />
+            </div>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}
+
 /* ==========================================================================
    Main Application Component
    ========================================================================== */
 
 export default function App() {
   /* ------------------------------------------------------------------------
-     1. Video-Exact 4-Stage Intro Preloader State Machine (0ms - 4850ms)
+     1. Video-Exact 4-Stage Intro Preloader State Machine (0ms - 3500ms)
+     Streamlined & buttery smooth: eliminates dead air and mounting spikes
      ------------------------------------------------------------------------ */
   const [introStage, setIntroStage] = useState(1);
   const [introRunId, setIntroRunId] = useState(0);
 
   useEffect(() => {
     setIntroStage(1);
-    const t2 = setTimeout(() => setIntroStage(2), 700);
-    const t3 = setTimeout(() => setIntroStage(3), 1450);
-    const t35 = setTimeout(() => setIntroStage(3.5), 3100);
-    const t4 = setTimeout(() => setIntroStage(4), 3350);
-    const t5 = setTimeout(() => setIntroStage(5), 4850);
+    const t2 = setTimeout(() => setIntroStage(2), 650);
+    const t3 = setTimeout(() => setIntroStage(3), 1350);
+    const t4 = setTimeout(() => setIntroStage(4), 2150);
+    const t5 = setTimeout(() => setIntroStage(5), 3500);
 
     return () => {
       clearTimeout(t2);
       clearTimeout(t3);
-      clearTimeout(t35);
       clearTimeout(t4);
       clearTimeout(t5);
     };
@@ -475,78 +613,33 @@ export default function App() {
   }, []);
 
   /* ------------------------------------------------------------------------
-     2. Scroll-Linked Convergence of the 7 Hero Seeds into the 7 Berries
-        of the 122x193px Branch Emblem
+     2. Layout Dimensions & Emblem Target (Resize only - NO scroll re-renders)
      ------------------------------------------------------------------------ */
   const emblemTargetRef = useRef(null);
-  const [scrollState, setScrollState] = useState({
-    scrollY: 0,
+  const [viewportSize, setViewportSize] = useState(() => ({
     vw: typeof window !== 'undefined' ? window.innerWidth : 1440,
     vh: typeof window !== 'undefined' ? window.innerHeight : 900,
-    emblemDocX: typeof window !== 'undefined' ? window.innerWidth / 2 : 720,
-    emblemDocY: 1450,
-  });
+  }));
+  const [branchDrawProgress, setBranchDrawProgress] = useState(0);
 
-  const measureLayout = useCallback(() => {
-    if (typeof window === 'undefined') return;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const scrollY = window.scrollY;
-    let emblemDocX = vw / 2;
-    let emblemDocY = vh * 1.65;
-
-    if (emblemTargetRef.current) {
-      const rect = emblemTargetRef.current.getBoundingClientRect();
-      emblemDocX = rect.left + window.scrollX + rect.width / 2;
-      emblemDocY = rect.top + window.scrollY + rect.height / 2;
-    }
-
-    setScrollState({
-      scrollY,
-      vw,
-      vh,
-      emblemDocX,
-      emblemDocY,
-    });
-  }, []);
-
-  useLayoutEffect(() => {
-    measureLayout();
+  useEffect(() => {
     let rafId = null;
-
-    const onScrollOrResize = () => {
+    const onResize = () => {
       if (rafId) return;
       rafId = window.requestAnimationFrame(() => {
         rafId = null;
-        measureLayout();
+        setViewportSize({
+          vw: window.innerWidth,
+          vh: window.innerHeight,
+        });
       });
     };
-
-    window.addEventListener('scroll', onScrollOrResize, { passive: true });
-    window.addEventListener('resize', onScrollOrResize, { passive: true });
-    const tRecalc = setTimeout(measureLayout, 600);
-
+    window.addEventListener('resize', onResize, { passive: true });
     return () => {
       if (rafId) window.cancelAnimationFrame(rafId);
-      clearTimeout(tRecalc);
-      window.removeEventListener('scroll', onScrollOrResize);
-      window.removeEventListener('resize', onScrollOrResize);
+      window.removeEventListener('resize', onResize);
     };
-  }, [measureLayout, introStage]);
-
-  const dockScrollY = Math.max(
-    360,
-    scrollState.emblemDocY - scrollState.vh * 0.53
-  );
-  const rawScrollProgress = Math.max(
-    0,
-    Math.min(1, scrollState.scrollY / dockScrollY)
-  );
-
-  const branchDrawProgress =
-    rawScrollProgress < 0.48
-      ? 0
-      : Math.min(1, (rawScrollProgress - 0.48) / 0.46);
+  }, []);
 
   /* ------------------------------------------------------------------------
      3. Engineering Build Rail Carousel State (687px cards, 9.4px gap)
@@ -606,7 +699,7 @@ export default function App() {
   };
 
   const isBurstStarted = introStage >= 4;
-  const isClusterVisible = introStage >= 3.5;
+  const isClusterVisible = introStage >= 3;
   const activeQuote = PHILOSOPHY_QUOTES[quoteState.index];
 
   /* Track translation formula centering the active 687px Build Rail card
@@ -615,7 +708,7 @@ export default function App() {
 
   /* Selected Systems 3-card track shift when inspecting Card 3 ("Wabrix") */
   const systemsRailTransform =
-    systemsOffsetIndex === 1 && scrollState.vw > 991
+    systemsOffsetIndex === 1 && viewportSize.vw > 991
       ? 'translate3d(calc(-50% - 4.7px), 0, 0)'
       : 'translate3d(0, 0, 0)';
 
@@ -626,12 +719,12 @@ export default function App() {
           ("Big things" [orange circle] "Start small")
           ==================================================================== */}
       <AnimatePresence>
-        {introStage < 3.5 && (
+        {introStage < 4 && (
           <motion.div
             key={`blob-morph-${introRunId}`}
             className="intro-overlay-layer"
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.08 } }}
+            exit={{ opacity: 0, scale: 0, transition: { duration: 0.15 } }}
           >
             <motion.div
               className="intro-central-blob"
@@ -641,10 +734,12 @@ export default function App() {
                   ? { scale: 24, rotate: 0 }
                   : introStage === 2
                   ? { scale: 1.14, rotate: -18 }
-                  : { scale: 0.44, rotate: -28 }
+                  : introStage === 3
+                  ? { scale: 0.44, rotate: -28 }
+                  : { scale: 0, opacity: 0 }
               }
               transition={{
-                duration: introStage === 3 ? 0.65 : 0.75,
+                duration: introStage === 3 ? 0.65 : 0.72,
                 ease: EASE_MORPH,
               }}
             >
@@ -665,8 +760,8 @@ export default function App() {
                   ? { opacity: 1, x: -46, y: 0 }
                   : {
                       opacity: [1, 0.26, 0],
-                      x: -scrollState.vw * 0.27,
-                      y: -scrollState.vh * 0.3,
+                      x: -viewportSize.vw * 0.27,
+                      y: -viewportSize.vh * 0.3,
                     }
               }
               exit={{ opacity: 0 }}
@@ -674,9 +769,9 @@ export default function App() {
                 introStage < 4
                   ? { duration: 0.42, ease: EASE_MORPH }
                   : {
-                      duration: 1.4,
+                      duration: 1.1,
                       ease: EASE_MORPH,
-                      opacity: { duration: 1.4, times: [0, 0.45, 1] },
+                      opacity: { duration: 1.1, times: [0, 0.45, 1] },
                     }
               }
             >
@@ -693,8 +788,8 @@ export default function App() {
                   ? { opacity: 1, x: 46, y: 0 }
                   : {
                       opacity: [1, 0.26, 0],
-                      x: scrollState.vw * 0.27,
-                      y: -scrollState.vh * 0.3,
+                      x: viewportSize.vw * 0.27,
+                      y: -viewportSize.vh * 0.3,
                     }
               }
               exit={{ opacity: 0 }}
@@ -702,9 +797,9 @@ export default function App() {
                 introStage < 4
                   ? { duration: 0.45, delay: 0.18, ease: EASE_MORPH }
                   : {
-                      duration: 1.4,
+                      duration: 1.1,
                       ease: EASE_MORPH,
-                      opacity: { duration: 1.4, times: [0, 0.45, 1] },
+                      opacity: { duration: 1.1, times: [0, 0.45, 1] },
                     }
               }
             >
@@ -726,78 +821,18 @@ export default function App() {
 
       {/* ====================================================================
           SEQUENCE 2 & 4: The 7 Organic #fb5e00 Seeds Layer
-          - Stage 3.5: Cluster at viewport center
-          - Stage 4: Burst radially to 7 Hero coordinates
-          - On Scroll: Converge downward into the 7 branch tips of BranchSpineSVG
+          Pre-rendered at center during stage 3, explodes outward in stage 4,
+          and converges downward into the branch tips on scroll.
           ==================================================================== */}
       {isClusterVisible && (
-        <div className="scroll-seeds-document-layer" aria-hidden="true">
-          {HERO_SEEDS.map((seed, idx) => {
-            const tip = EMBLEM_TIP_OFFSETS[idx];
-
-            const clusterX = scrollState.vw * 0.5 + seed.clusterDx;
-            const clusterY = scrollState.vh * 0.5 + seed.clusterDy;
-            const clusterSize = 26;
-
-            const heroDocX = seed.heroX * scrollState.vw;
-            const heroDocY = seed.heroY * scrollState.vh;
-
-            const targetDocX = scrollState.emblemDocX + tip.dx;
-            const targetDocY = scrollState.emblemDocY + tip.dy;
-
-            const staggeredP = Math.max(
-              0,
-              Math.min(1, Math.pow(rawScrollProgress, 0.92 + (idx % 3) * 0.08))
-            );
-            const easeX = easeInOutCubic(staggeredP);
-            const easeY = easeInOutQuad(staggeredP);
-
-            const currentDocX = isBurstStarted
-              ? heroDocX + (targetDocX - heroDocX) * easeX
-              : clusterX;
-            const currentDocY = isBurstStarted
-              ? heroDocY + (targetDocY - heroDocY) * easeY
-              : clusterY;
-            const currentSize = isBurstStarted
-              ? seed.size + (tip.size - seed.size) * easeX
-              : clusterSize;
-
-            return (
-              <motion.div
-                key={`seed-${seed.id}-${introRunId}`}
-                className="scroll-seed-item"
-                initial={{
-                  x: clusterX - clusterSize / 2,
-                  y: clusterY - clusterSize / 2,
-                  width: clusterSize,
-                  height: clusterSize,
-                }}
-                animate={{
-                  x: currentDocX - currentSize / 2,
-                  y: currentDocY - currentSize / 2,
-                  width: currentSize,
-                  height: currentSize,
-                }}
-                transition={
-                  scrollState.scrollY > 4
-                    ? { duration: 0.06, ease: 'linear' }
-                    : { duration: 0.88, ease: EASE_MORPH }
-                }
-              >
-                <div
-                  className={
-                    rawScrollProgress < 0.85 ? `seed-drift-${seed.id}` : ''
-                  }
-                >
-                  <OrganicSeedBlob
-                    variant={seed.variant}
-                    size={currentSize}
-                  />
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
+        <ScrollSeedLayer
+          isBurstStarted={isBurstStarted}
+          introRunId={introRunId}
+          vw={viewportSize.vw}
+          vh={viewportSize.vh}
+          emblemTargetRef={emblemTargetRef}
+          onBranchProgress={setBranchDrawProgress}
+        />
       )}
 
       {/* ====================================================================
@@ -1064,7 +1099,7 @@ export default function App() {
             <div ref={emblemTargetRef} className="emblem-dock-target">
               <BranchSpineSVG
                 drawProgress={branchDrawProgress}
-                showDockedBerries={!isClusterVisible}
+                showDockedBerries={introStage === 5 && branchDrawProgress >= 0.95}
               />
             </div>
           </div>
