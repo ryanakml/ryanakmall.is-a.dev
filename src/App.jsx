@@ -532,7 +532,7 @@ function ScrollSeedLayer({
             initial={{
               x: centerX - 50,
               y: centerY - 50,
-              scale: 0.44,
+              scale: 0.36,
               opacity: 0,
             }}
             animate={
@@ -546,7 +546,7 @@ function ScrollSeedLayer({
                 : {
                     x: centerX - 50,
                     y: centerY - 50,
-                    scale: 0.44,
+                    scale: 0.36,
                     opacity: 0,
                   }
             }
@@ -556,8 +556,8 @@ function ScrollSeedLayer({
                 : {
                     duration: 0.85,
                     delay: idx * 0.02,
-                    ease: EASE_MORPH,
-                    opacity: { duration: 0.2 },
+                    ease: [0.16, 1, 0.3, 1],
+                    opacity: { duration: 0.15 },
                   }
             }
           >
@@ -582,24 +582,20 @@ function ScrollSeedLayer({
 
 export default function App() {
   /* ------------------------------------------------------------------------
-     1. Video-Exact 4-Stage Intro Preloader State Machine (0ms - 3500ms)
-     Streamlined & buttery smooth: eliminates dead air and mounting spikes
+     1. Unified Liquid Intro State Machine (0ms -> 1550ms -> 2550ms)
+     Flows continuously like water: NO multi-stage pauses or stop-and-go jerks
      ------------------------------------------------------------------------ */
-  const [introStage, setIntroStage] = useState(1);
+  const [introPhase, setIntroPhase] = useState('entering'); // 'entering' | 'burst' | 'complete'
   const [introRunId, setIntroRunId] = useState(0);
 
   useEffect(() => {
-    setIntroStage(1);
-    const t2 = setTimeout(() => setIntroStage(2), 650);
-    const t3 = setTimeout(() => setIntroStage(3), 1350);
-    const t4 = setTimeout(() => setIntroStage(4), 2150);
-    const t5 = setTimeout(() => setIntroStage(5), 3500);
+    setIntroPhase('entering');
+    const tBurst = setTimeout(() => setIntroPhase('burst'), 1550);
+    const tDone = setTimeout(() => setIntroPhase('complete'), 2550);
 
     return () => {
-      clearTimeout(t2);
-      clearTimeout(t3);
-      clearTimeout(t4);
-      clearTimeout(t5);
+      clearTimeout(tBurst);
+      clearTimeout(tDone);
     };
   }, [introRunId]);
 
@@ -609,7 +605,7 @@ export default function App() {
   }, []);
 
   const handleSkipIntro = useCallback(() => {
-    setIntroStage(5);
+    setIntroPhase('complete');
   }, []);
 
   /* ------------------------------------------------------------------------
@@ -698,8 +694,8 @@ export default function App() {
     )}&body=${body}`;
   };
 
-  const isBurstStarted = introStage >= 4;
-  const isClusterVisible = introStage >= 3;
+  const isBurstStarted = introPhase !== 'entering';
+  const isIntroComplete = introPhase === 'complete';
   const activeQuote = PHILOSOPHY_QUOTES[quoteState.index];
 
   /* Track translation formula centering the active 687px Build Rail card
@@ -715,32 +711,29 @@ export default function App() {
   return (
     <div className="page-canvas">
       {/* ====================================================================
-          SEQUENCE 1: Video-Exact Intro Organic Blob & Diagonal Word Drift
-          ("Big things" [orange circle] "Start small")
+          SEQUENCE 1: Continuous Liquid Organic Blob & Word Drift
+          Flows continuously like water: 22 -> 1.15 -> 0.44 -> 0.36 -> Burst!
           ==================================================================== */}
       <AnimatePresence>
-        {introStage < 4 && (
+        {!isBurstStarted && (
           <motion.div
             key={`blob-morph-${introRunId}`}
             className="intro-overlay-layer"
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 0, transition: { duration: 0.15 } }}
+            exit={{ opacity: 0, scale: 0, transition: { duration: 0.12 } }}
           >
             <motion.div
               className="intro-central-blob"
-              initial={{ scale: 24, rotate: 0 }}
-              animate={
-                introStage === 1
-                  ? { scale: 24, rotate: 0 }
-                  : introStage === 2
-                  ? { scale: 1.14, rotate: -18 }
-                  : introStage === 3
-                  ? { scale: 0.44, rotate: -28 }
-                  : { scale: 0, opacity: 0 }
-              }
+              initial={{ scale: 22, rotate: 0 }}
+              animate={{
+                scale: [22, 1.15, 0.44, 0.36, 0],
+                rotate: [0, -14, -28, -32, -32],
+                opacity: [1, 1, 1, 1, 0],
+              }}
               transition={{
-                duration: introStage === 3 ? 0.65 : 0.72,
-                ease: EASE_MORPH,
+                duration: 1.55,
+                times: [0, 0.42, 0.82, 0.94, 1],
+                ease: [0.22, 1, 0.36, 1],
               }}
             >
               <OrganicSeedBlob variant={0} size={100} />
@@ -750,28 +743,32 @@ export default function App() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {introStage < 5 && (
+        {!isIntroComplete && (
           <React.Fragment key={`words-${introRunId}`}>
             <motion.span
               className="intro-floating-word intro-floating-word--left"
-              initial={{ opacity: 0, x: -46, y: 0 }}
+              initial={{ opacity: 0, x: -90, y: 0 }}
               animate={
-                introStage < 4
-                  ? { opacity: 1, x: -46, y: 0 }
-                  : {
-                      opacity: [1, 0.26, 0],
+                isBurstStarted
+                  ? {
+                      opacity: 0,
                       x: -viewportSize.vw * 0.27,
                       y: -viewportSize.vh * 0.3,
+                    }
+                  : {
+                      opacity: [0, 1, 1],
+                      x: [-90, -46, -46],
+                      y: [0, 0, 0],
                     }
               }
               exit={{ opacity: 0 }}
               transition={
-                introStage < 4
-                  ? { duration: 0.42, ease: EASE_MORPH }
+                isBurstStarted
+                  ? { duration: 0.85, ease: [0.16, 1, 0.3, 1] }
                   : {
-                      duration: 1.1,
-                      ease: EASE_MORPH,
-                      opacity: { duration: 1.1, times: [0, 0.45, 1] },
+                      duration: 1.55,
+                      times: [0, 0.35, 1],
+                      ease: [0.22, 1, 0.36, 1],
                     }
               }
             >
@@ -780,33 +777,35 @@ export default function App() {
 
             <motion.span
               className="intro-floating-word intro-floating-word--right"
-              initial={{ opacity: 0, x: 46, y: 0 }}
+              initial={{ opacity: 0, x: 90, y: 0 }}
               animate={
-                introStage === 1
-                  ? { opacity: 0, x: 46, y: 0 }
-                  : introStage < 4
-                  ? { opacity: 1, x: 46, y: 0 }
-                  : {
-                      opacity: [1, 0.26, 0],
+                isBurstStarted
+                  ? {
+                      opacity: 0,
                       x: viewportSize.vw * 0.27,
                       y: -viewportSize.vh * 0.3,
+                    }
+                  : {
+                      opacity: [0, 1, 1],
+                      x: [90, 46, 46],
+                      y: [0, 0, 0],
                     }
               }
               exit={{ opacity: 0 }}
               transition={
-                introStage < 4
-                  ? { duration: 0.45, delay: 0.18, ease: EASE_MORPH }
+                isBurstStarted
+                  ? { duration: 0.85, ease: [0.16, 1, 0.3, 1] }
                   : {
-                      duration: 1.1,
-                      ease: EASE_MORPH,
-                      opacity: { duration: 1.1, times: [0, 0.45, 1] },
+                      duration: 1.55,
+                      times: [0, 0.35, 1],
+                      ease: [0.22, 1, 0.36, 1],
                     }
               }
             >
               Start small
             </motion.span>
 
-            {introStage < 4 && (
+            {!isBurstStarted && (
               <button
                 type="button"
                 onClick={handleSkipIntro}
@@ -821,19 +820,16 @@ export default function App() {
 
       {/* ====================================================================
           SEQUENCE 2 & 4: The 7 Organic #fb5e00 Seeds Layer
-          Pre-rendered at center during stage 3, explodes outward in stage 4,
-          and converges downward into the branch tips on scroll.
+          Radial burst in phase 2, converges into the branch emblem on scroll.
           ==================================================================== */}
-      {isClusterVisible && (
-        <ScrollSeedLayer
-          isBurstStarted={isBurstStarted}
-          introRunId={introRunId}
-          vw={viewportSize.vw}
-          vh={viewportSize.vh}
-          emblemTargetRef={emblemTargetRef}
-          onBranchProgress={setBranchDrawProgress}
-        />
-      )}
+      <ScrollSeedLayer
+        isBurstStarted={isBurstStarted}
+        introRunId={introRunId}
+        vw={viewportSize.vw}
+        vh={viewportSize.vh}
+        emblemTargetRef={emblemTargetRef}
+        onBranchProgress={setBranchDrawProgress}
+      />
 
       {/* ====================================================================
           FIRST SCREEN: Sky Fade, ryanakml Masthead & 2-Column Index Navigation,
@@ -844,7 +840,7 @@ export default function App() {
           className="sky-fade-surface"
           initial={{ opacity: 0 }}
           animate={{
-            opacity: introStage === 3.5 ? 0.45 : isBurstStarted ? 1 : 0,
+            opacity: isBurstStarted ? 1 : 0,
           }}
           transition={{ duration: 0.85, ease: EASE_MORPH }}
         />
@@ -854,7 +850,7 @@ export default function App() {
           className="masthead main-container"
           initial={{ opacity: 0 }}
           animate={{
-            opacity: introStage === 3.5 ? 0.35 : isBurstStarted ? 1 : 0,
+            opacity: isBurstStarted ? 1 : 0,
           }}
           transition={{ duration: 0.75, ease: EASE_MORPH }}
         >
@@ -990,7 +986,7 @@ export default function App() {
             className="main-container"
             initial={{ opacity: 0 }}
             animate={{
-              opacity: introStage === 3.5 ? 0.35 : isBurstStarted ? 1 : 0,
+              opacity: isBurstStarted ? 1 : 0,
             }}
             transition={{ duration: 0.75, ease: EASE_MORPH }}
           >
@@ -1099,7 +1095,7 @@ export default function App() {
             <div ref={emblemTargetRef} className="emblem-dock-target">
               <BranchSpineSVG
                 drawProgress={branchDrawProgress}
-                showDockedBerries={introStage === 5 && branchDrawProgress >= 0.95}
+                showDockedBerries={isIntroComplete && branchDrawProgress >= 0.95}
               />
             </div>
           </div>
