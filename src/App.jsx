@@ -198,29 +198,36 @@ const UPSTREAM_MERGED_PRS = [
 ];
 
 /* ==========================================================================
-   7. Isolated Engineering Philosophy Quotations
+   7. Technical Convictions & Engineering Takes (No AI slop, no cringe quotes)
    ========================================================================== */
 const PHILOSOPHY_QUOTES = [
   {
-    id: 'phil-1',
+    id: 'conviction-1',
     quote:
-      '"I want to understand the entire lifecycle of a feature: from user interaction and API validation, down to database transactions and background workers, and back to the client state."',
-    attribution: 'Ryan Akmal Pasya · Full-Stack & Backend Focus',
-    tag: 'ryanakml',
+      '“A pretty loading spinner is just an apology for an unoptimized backend. If your query takes 1.8 seconds to return 20 rows, no amount of micro-interactions can rescue the UX.”',
+    attribution: 'CONVICTION 01 · LATENCY & DATA FLOW',
+    tag: 'Latency First',
   },
   {
-    id: 'phil-2',
+    id: 'conviction-2',
     quote:
-      '"Workers must never assume they still own a job. Heartbeat leases, fencing tokens, and explicit database transaction boundaries are what keep recovery safe when networks partition."',
-    attribution: 'Lessons from Deadbolt · Workflow Exploration',
-    tag: 'Deadbolt',
+      '“AI can vomit 500 lines of boilerplate in 3 seconds. It can’t tell you why line 43 will deadlock PostgreSQL under 500 concurrent webhook workers. System architecture still requires human paranoia.”',
+    attribution: 'CONVICTION 02 · AI & CONCURRENCY',
+    tag: 'Human Paranoia',
   },
   {
-    id: 'phil-3',
+    id: 'conviction-3',
     quote:
-      '"AI tools speed up exploration and syntax generation, but system architecture requires human scrutiny. My focus stays on verifying data flow, weighing operational tradeoffs, and proving edge-case behavior with tests."',
-    attribution: 'Engineering Workflow · Aceh, Indonesia',
-    tag: 'Practice',
+      '“If a background worker can’t survive getting SIGKILLed mid-transaction and replayed safely from an atomic outbox, it’s not fault-tolerant—it was just lucky.”',
+    attribution: 'CONVICTION 03 · DISTRIBUTED INVARIANTS',
+    tag: 'Worker Leases',
+  },
+  {
+    id: 'conviction-4',
+    quote:
+      '“ORMs are delightful until a 3-line abstraction generates 47 hidden roundtrips. When throughput and money are on the line, explicit SQL boundaries beat magic every single time.”',
+    attribution: 'CONVICTION 04 · SCHEMA INTEGRITY',
+    tag: 'Explicit SQL',
   },
 ];
 
@@ -1453,7 +1460,7 @@ export default function App() {
                   type="button"
                   onClick={handlePrevQuote}
                   className="arrow-square"
-                  aria-label="Previous engineering principle"
+                  aria-label="Previous technical conviction"
                 >
                   <ArrowIcon direction="left" />
                 </button>
@@ -1461,7 +1468,7 @@ export default function App() {
                   type="button"
                   onClick={handleNextQuote}
                   className="arrow-square"
-                  aria-label="Next engineering principle"
+                  aria-label="Next technical conviction"
                 >
                   <ArrowIcon direction="right" />
                 </button>
