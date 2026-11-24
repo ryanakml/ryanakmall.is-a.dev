@@ -1064,18 +1064,31 @@ input {
 .paired-cards-wrapper {
   margin-top: var(--step-4);
   position: relative;
+  container-type: inline-size;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 8px;
 }
 
-/* 2 main 687px columns inside the container + 3rd card peeking at the right edge */
+.paired-cards-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* Display exactly 2 cards at a time on desktop + 3rd card horizontally scrollable */
 .peeking-three-rail {
-  display: grid;
-  grid-template-columns:
-    calc((100% - 9.4px) / 2)
-    calc((100% - 9.4px) / 2)
-    calc((100% - 9.4px) / 2);
+  display: flex;
   gap: 9.4px;
-  width: 100%;
-  transition: transform 680ms var(--ease-carousel);
+  width: max-content;
+}
+
+.peeking-three-rail .editorial-media-card {
+  width: calc((100cqw - 9.4px) / 2);
+  flex: 0 0 calc((100cqw - 9.4px) / 2);
+  scroll-snap-align: start;
 }
 
 .systems-peek-controls {
@@ -2245,9 +2258,23 @@ input {
     grid-column: span 4;
   }
 
-  .paired-media-grid,
-  .peeking-three-rail {
+  .paired-media-grid {
     grid-template-columns: 1fr;
+  }
+
+  .paired-cards-wrapper {
+    overflow-x: visible;
+  }
+
+  .peeking-three-rail {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .peeking-three-rail .editorial-media-card {
+    width: 100%;
+    flex: 0 0 auto;
   }
 
   .editorial-media-card {

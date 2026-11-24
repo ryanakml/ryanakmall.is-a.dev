@@ -116,6 +116,15 @@ const HERO_SEEDS = [
    ========================================================================== */
 const BUILD_RAIL_ITEMS = [
   {
+    id: 'wabrix',
+    alt: 'Wabrix edge webhook ingress on Cloudflare Workers and Hono with Convex state',
+    caption:
+      'Wabrix · Edge webhook ingress on Cloudflare Workers and Hono with Convex real-time state & AI handoff',
+    repoLabel: 'wabrix.nylo.me ↗',
+    repoHref: 'https://wabrix.nylo.me',
+    accent: 'green',
+  },
+  {
     id: 'flowdesk',
     alt: 'FlowDesk AI transactional outbox architecture and webhook replay runner',
     caption:
@@ -128,19 +137,10 @@ const BUILD_RAIL_ITEMS = [
     id: 'deadbolt',
     alt: 'Deadbolt collaborative Go workflow engine lease fencing and recovery check',
     caption:
-      'Deadbolt · Collaborative Go workflow engine exploring worker leases, fencing tokens & failure recovery',
+      'Deadbolt · Collaborative Go workflow engine with distributed worker leases, fencing tokens & failure recovery',
     repoLabel: 'Deadbolt ↗',
     repoHref: 'https://github.com/ryanakml/Deadbolt',
     accent: 'orange',
-  },
-  {
-    id: 'wabrix',
-    alt: 'Wabrix edge webhook ingress on Cloudflare Workers and Hono with Convex state',
-    caption:
-      'Wabrix · Edge webhook ingress on Cloudflare Workers and Hono with Convex real-time state & AI handoff',
-    repoLabel: 'wabrix.nylo.me ↗',
-    repoHref: 'https://wabrix.nylo.me',
-    accent: 'green',
   },
 ];
 
@@ -532,7 +532,7 @@ function ScrollSeedLayer({
             initial={{
               x: centerX - 50,
               y: centerY - 50,
-              scale: 0.36,
+              scale: 0.44,
               opacity: 0,
             }}
             animate={
@@ -546,7 +546,7 @@ function ScrollSeedLayer({
                 : {
                     x: centerX - 50,
                     y: centerY - 50,
-                    scale: 0.36,
+                    scale: 0.44,
                     opacity: 0,
                   }
             }
@@ -556,8 +556,8 @@ function ScrollSeedLayer({
                 : {
                     duration: 0.85,
                     delay: idx * 0.02,
-                    ease: [0.16, 1, 0.3, 1],
-                    opacity: { duration: 0.15 },
+                    ease: EASE_MORPH,
+                    opacity: { duration: 0.2 },
                   }
             }
           >
@@ -582,20 +582,24 @@ function ScrollSeedLayer({
 
 export default function App() {
   /* ------------------------------------------------------------------------
-     1. Unified Liquid Intro State Machine (0ms -> 1550ms -> 2550ms)
-     Flows continuously like water: NO multi-stage pauses or stop-and-go jerks
+     1. Video-Exact 4-Stage Intro Preloader State Machine (0ms - 3500ms)
+     Streamlined & buttery smooth: eliminates dead air and mounting spikes
      ------------------------------------------------------------------------ */
-  const [introPhase, setIntroPhase] = useState('entering'); // 'entering' | 'burst' | 'complete'
+  const [introStage, setIntroStage] = useState(1);
   const [introRunId, setIntroRunId] = useState(0);
 
   useEffect(() => {
-    setIntroPhase('entering');
-    const tBurst = setTimeout(() => setIntroPhase('burst'), 1550);
-    const tDone = setTimeout(() => setIntroPhase('complete'), 2550);
+    setIntroStage(1);
+    const t2 = setTimeout(() => setIntroStage(2), 650);
+    const t3 = setTimeout(() => setIntroStage(3), 1350);
+    const t4 = setTimeout(() => setIntroStage(4), 2150);
+    const t5 = setTimeout(() => setIntroStage(5), 3500);
 
     return () => {
-      clearTimeout(tBurst);
-      clearTimeout(tDone);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+      clearTimeout(t5);
     };
   }, [introRunId]);
 
@@ -605,7 +609,7 @@ export default function App() {
   }, []);
 
   const handleSkipIntro = useCallback(() => {
-    setIntroPhase('complete');
+    setIntroStage(5);
   }, []);
 
   /* ------------------------------------------------------------------------
@@ -655,9 +659,23 @@ export default function App() {
   };
 
   /* ------------------------------------------------------------------------
-     4. Selected Systems Peeking 3rd Card Shift State
+     4. Selected Systems Horizontal Wheel/Scroll Handler
      ------------------------------------------------------------------------ */
-  const [systemsOffsetIndex, setSystemsOffsetIndex] = useState(0);
+  const handleSystemsWheel = useCallback((e) => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && Math.abs(e.deltaY) > 4) {
+      const el = e.currentTarget;
+      const atStart = el.scrollLeft <= 2;
+      const atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 2;
+
+      if (e.deltaY > 0 && !atEnd) {
+        e.preventDefault();
+        el.scrollBy({ left: e.deltaY * 1.4, behavior: 'smooth' });
+      } else if (e.deltaY < 0 && !atStart) {
+        e.preventDefault();
+        el.scrollBy({ left: e.deltaY * 1.4, behavior: 'smooth' });
+      }
+    }
+  }, []);
 
   /* ------------------------------------------------------------------------
      5. Isolated Engineering Philosophy Quotation Carousel State
@@ -694,46 +712,44 @@ export default function App() {
     )}&body=${body}`;
   };
 
-  const isBurstStarted = introPhase !== 'entering';
-  const isIntroComplete = introPhase === 'complete';
+  const isBurstStarted = introStage >= 4;
+  const isClusterVisible = introStage >= 3;
   const activeQuote = PHILOSOPHY_QUOTES[quoteState.index];
 
   /* Track translation formula centering the active 687px Build Rail card
      with 9.4px gutters and peeking adjacent cards on both viewport edges */
   const railTrackTransform = `translate3d(calc(50vw - (min(687px, 84vw) / 2) - ${activeRailIndex} * (min(687px, 84vw) + 9.4px)), 0, 0)`;
 
-  /* Selected Systems 3-card track shift when inspecting Card 3 ("Wabrix") */
-  const systemsRailTransform =
-    systemsOffsetIndex === 1 && viewportSize.vw > 991
-      ? 'translate3d(calc(-50% - 4.7px), 0, 0)'
-      : 'translate3d(0, 0, 0)';
 
   return (
     <div className="page-canvas">
       {/* ====================================================================
-          SEQUENCE 1: Continuous Liquid Organic Blob & Word Drift
-          Flows continuously like water: 22 -> 1.15 -> 0.44 -> 0.36 -> Burst!
+          SEQUENCE 1: Video-Exact Intro Organic Blob & Diagonal Word Drift
+          ("Big things" [orange circle] "Start small")
           ==================================================================== */}
       <AnimatePresence>
-        {!isBurstStarted && (
+        {introStage < 4 && (
           <motion.div
             key={`blob-morph-${introRunId}`}
             className="intro-overlay-layer"
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 0, transition: { duration: 0.12 } }}
+            exit={{ opacity: 0, scale: 0, transition: { duration: 0.15 } }}
           >
             <motion.div
               className="intro-central-blob"
-              initial={{ scale: 22, rotate: 0 }}
-              animate={{
-                scale: [22, 1.15, 0.44, 0.36, 0],
-                rotate: [0, -14, -28, -32, -32],
-                opacity: [1, 1, 1, 1, 0],
-              }}
+              initial={{ scale: 24, rotate: 0 }}
+              animate={
+                introStage === 1
+                  ? { scale: 24, rotate: 0 }
+                  : introStage === 2
+                  ? { scale: 1.14, rotate: -18 }
+                  : introStage === 3
+                  ? { scale: 0.44, rotate: -28 }
+                  : { scale: 0, opacity: 0 }
+              }
               transition={{
-                duration: 1.55,
-                times: [0, 0.42, 0.82, 0.94, 1],
-                ease: [0.22, 1, 0.36, 1],
+                duration: introStage === 3 ? 0.65 : 0.72,
+                ease: EASE_MORPH,
               }}
             >
               <OrganicSeedBlob variant={0} size={100} />
@@ -743,32 +759,28 @@ export default function App() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {!isIntroComplete && (
+        {introStage < 5 && (
           <React.Fragment key={`words-${introRunId}`}>
             <motion.span
               className="intro-floating-word intro-floating-word--left"
-              initial={{ opacity: 0, x: -90, y: 0 }}
+              initial={{ opacity: 0, x: -46, y: 0 }}
               animate={
-                isBurstStarted
-                  ? {
-                      opacity: 0,
+                introStage < 4
+                  ? { opacity: 1, x: -46, y: 0 }
+                  : {
+                      opacity: [1, 0.26, 0],
                       x: -viewportSize.vw * 0.27,
                       y: -viewportSize.vh * 0.3,
-                    }
-                  : {
-                      opacity: [0, 1, 1],
-                      x: [-90, -46, -46],
-                      y: [0, 0, 0],
                     }
               }
               exit={{ opacity: 0 }}
               transition={
-                isBurstStarted
-                  ? { duration: 0.85, ease: [0.16, 1, 0.3, 1] }
+                introStage < 4
+                  ? { duration: 0.42, ease: EASE_MORPH }
                   : {
-                      duration: 1.55,
-                      times: [0, 0.35, 1],
-                      ease: [0.22, 1, 0.36, 1],
+                      duration: 1.1,
+                      ease: EASE_MORPH,
+                      opacity: { duration: 1.1, times: [0, 0.45, 1] },
                     }
               }
             >
@@ -777,35 +789,33 @@ export default function App() {
 
             <motion.span
               className="intro-floating-word intro-floating-word--right"
-              initial={{ opacity: 0, x: 90, y: 0 }}
+              initial={{ opacity: 0, x: 46, y: 0 }}
               animate={
-                isBurstStarted
-                  ? {
-                      opacity: 0,
+                introStage === 1
+                  ? { opacity: 0, x: 46, y: 0 }
+                  : introStage < 4
+                  ? { opacity: 1, x: 46, y: 0 }
+                  : {
+                      opacity: [1, 0.26, 0],
                       x: viewportSize.vw * 0.27,
                       y: -viewportSize.vh * 0.3,
-                    }
-                  : {
-                      opacity: [0, 1, 1],
-                      x: [90, 46, 46],
-                      y: [0, 0, 0],
                     }
               }
               exit={{ opacity: 0 }}
               transition={
-                isBurstStarted
-                  ? { duration: 0.85, ease: [0.16, 1, 0.3, 1] }
+                introStage < 4
+                  ? { duration: 0.45, delay: 0.18, ease: EASE_MORPH }
                   : {
-                      duration: 1.55,
-                      times: [0, 0.35, 1],
-                      ease: [0.22, 1, 0.36, 1],
+                      duration: 1.1,
+                      ease: EASE_MORPH,
+                      opacity: { duration: 1.1, times: [0, 0.45, 1] },
                     }
               }
             >
               Start small
             </motion.span>
 
-            {!isBurstStarted && (
+            {introStage < 4 && (
               <button
                 type="button"
                 onClick={handleSkipIntro}
@@ -820,16 +830,19 @@ export default function App() {
 
       {/* ====================================================================
           SEQUENCE 2 & 4: The 7 Organic #fb5e00 Seeds Layer
-          Radial burst in phase 2, converges into the branch emblem on scroll.
+          Pre-rendered at center during stage 3, explodes outward in stage 4,
+          and converges downward into the branch tips on scroll.
           ==================================================================== */}
-      <ScrollSeedLayer
-        isBurstStarted={isBurstStarted}
-        introRunId={introRunId}
-        vw={viewportSize.vw}
-        vh={viewportSize.vh}
-        emblemTargetRef={emblemTargetRef}
-        onBranchProgress={setBranchDrawProgress}
-      />
+      {isClusterVisible && (
+        <ScrollSeedLayer
+          isBurstStarted={isBurstStarted}
+          introRunId={introRunId}
+          vw={viewportSize.vw}
+          vh={viewportSize.vh}
+          emblemTargetRef={emblemTargetRef}
+          onBranchProgress={setBranchDrawProgress}
+        />
+      )}
 
       {/* ====================================================================
           FIRST SCREEN: Sky Fade, ryanakml Masthead & 2-Column Index Navigation,
@@ -840,7 +853,7 @@ export default function App() {
           className="sky-fade-surface"
           initial={{ opacity: 0 }}
           animate={{
-            opacity: isBurstStarted ? 1 : 0,
+            opacity: introStage === 3.5 ? 0.45 : isBurstStarted ? 1 : 0,
           }}
           transition={{ duration: 0.85, ease: EASE_MORPH }}
         />
@@ -850,7 +863,7 @@ export default function App() {
           className="masthead main-container"
           initial={{ opacity: 0 }}
           animate={{
-            opacity: isBurstStarted ? 1 : 0,
+            opacity: introStage === 3.5 ? 0.35 : isBurstStarted ? 1 : 0,
           }}
           transition={{ duration: 0.75, ease: EASE_MORPH }}
         >
@@ -986,7 +999,7 @@ export default function App() {
             className="main-container"
             initial={{ opacity: 0 }}
             animate={{
-              opacity: isBurstStarted ? 1 : 0,
+              opacity: introStage === 3.5 ? 0.35 : isBurstStarted ? 1 : 0,
             }}
             transition={{ duration: 0.75, ease: EASE_MORPH }}
           >
@@ -1095,7 +1108,7 @@ export default function App() {
             <div ref={emblemTargetRef} className="emblem-dock-target">
               <BranchSpineSVG
                 drawProgress={branchDrawProgress}
-                showDockedBerries={isIntroComplete && branchDrawProgress >= 0.95}
+                showDockedBerries={introStage === 5 && branchDrawProgress >= 0.95}
               />
             </div>
           </div>
@@ -1130,10 +1143,10 @@ export default function App() {
           </section>
 
           {/* ================================================================
-              6A. Chapter 1: "Selected Systems" (687x790px cards, 9.4px gap)
-              - Card 1: FlowDesk AI (#ffff48 dot + "Systems & Outbox")
-              - Card 2: Deadbolt (In Progress) (#fb5e00 quote + "Go & Distributed State")
-              - Card 3: Wabrix (Peeking right + "Managed Edge & AI")
+              6A. Chapter 1: "Selected Systems" (2-at-a-time horizontal snap)
+              - Card 1: Wabrix (Managed Edge & AI Handoff)
+              - Card 2: FlowDesk AI (Systems & Outbox)
+              - Card 3: Deadbolt (Go & Distributed State)
               ================================================================ */}
           <section
             id="systems"
@@ -1143,37 +1156,71 @@ export default function App() {
             <RuledSectionIntro
               variant="heading"
               title="Selected Systems"
-              support="Full-stack web applications, distributed workflow explorations, and edge ingress systems."
+              support="Full-stack web applications, distributed workflow systems, and edge ingress platforms."
               linkLabel="All repositories ↗"
               linkHref="https://github.com/ryanakml"
               external={true}
-              extraRight={
-                <button
-                  type="button"
-                  onClick={() =>
-                    setSystemsOffsetIndex((prev) => (prev === 0 ? 1 : 0))
-                  }
-                  className="type-caption outline-button"
-                >
-                  {systemsOffsetIndex === 0
-                    ? 'Slide to Wabrix →'
-                    : '← Back to FlowDesk & Deadbolt'}
-                </button>
-              }
             />
 
-            <div className="paired-cards-wrapper">
-              <div
-                className="peeking-three-rail"
-                style={{ transform: systemsRailTransform }}
-              >
-                {/* Card 1: FlowDesk AI (Zoomed-in WhatsApp + RAG Outbox interaction fragment) */}
+            <div
+              className="paired-cards-wrapper"
+              onWheel={handleSystemsWheel}
+            >
+              <div className="peeking-three-rail">
+                {/* Card 1: Wabrix */}
                 <motion.article
                   className="editorial-media-card"
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={VIEWPORT_ONCE}
                   transition={{ duration: 0.55, delay: 0, ease: EASE_MORPH }}
+                >
+                  <div className="card-media-backdrop card-media-backdrop--fragment">
+                    <TechnicalGridBackdrop accent="green" opacity={0.4} />
+                    <WabrixEdgeFragment />
+                  </div>
+                  <div className="photo-shade-scrim" />
+
+                  <div className="card-content-stack">
+                    <div className="card-text-group">
+                      <h3 className="type-card-heading">Wabrix</h3>
+                      <p className="type-body card-description">
+                        Edge webhook ingress on Cloudflare Workers and Hono, syncing
+                        reactive state through Convex for live operator takeover when
+                        automated message triage drops below confidence thresholds.
+                      </p>
+                    </div>
+                    <div className="card-date-tag-row">
+                      <span className="type-caption card-stack-icons-inline">
+                        <SkillLogo name="Next.js" size={14} variant="mono" />
+                        <SkillLogo name="Convex" size={14} variant="mono" />
+                        <SkillLogo
+                          name="Cloudflare Workers"
+                          size={14}
+                          variant="mono"
+                        />
+                        <SkillLogo name="Hono" size={14} variant="mono" />
+                        <span>Next.js · Convex · Cloudflare · Hono</span>
+                      </span>
+                      <a
+                        href="https://wabrix.nylo.me"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="type-caption card-outline-tag"
+                      >
+                        wabrix.nylo.me ↗
+                      </a>
+                    </div>
+                  </div>
+                </motion.article>
+
+                {/* Card 2: FlowDesk AI */}
+                <motion.article
+                  className="editorial-media-card"
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={VIEWPORT_ONCE}
+                  transition={{ duration: 0.55, delay: 0.09, ease: EASE_MORPH }}
                 >
                   <div className="card-media-backdrop card-media-backdrop--fragment">
                     <TechnicalGridBackdrop accent="yellow" opacity={0.4} />
@@ -1212,13 +1259,13 @@ export default function App() {
                   </div>
                 </motion.article>
 
-                {/* Card 2: Deadbolt (In Progress) (Native Stripe/Linear-grade lease fencing diagram) */}
+                {/* Card 3: Deadbolt */}
                 <motion.article
                   className="editorial-media-card"
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={VIEWPORT_ONCE}
-                  transition={{ duration: 0.55, delay: 0.09, ease: EASE_MORPH }}
+                  transition={{ duration: 0.55, delay: 0.18, ease: EASE_MORPH }}
                 >
                   <div className="card-media-backdrop card-media-backdrop--fragment">
                     <TechnicalGridBackdrop accent="orange" opacity={0.4} />
@@ -1228,13 +1275,11 @@ export default function App() {
 
                   <div className="card-content-stack">
                     <div className="card-text-group">
-                      <h3 className="type-card-heading">
-                        Deadbolt (In Progress)
-                      </h3>
+                      <h3 className="type-card-heading">Deadbolt</h3>
                       <p className="type-body card-description">
-                        Collaborative Go workflow engine exploring fault-tolerant
+                        Collaborative Go workflow engine engineered for fault-tolerant
                         job execution. Pairs PostgreSQL state persistence with
-                        NATS JetStream, using heartbeat leases and fencing tokens
+                        NATS JetStream, using heartbeat leases and monotonic fencing tokens
                         to prevent zombie workers from corrupting state during
                         network partitions.
                       </p>
@@ -1257,58 +1302,6 @@ export default function App() {
                         className="type-caption card-outline-tag"
                       >
                         Go &amp; Distributed Systems
-                      </a>
-                    </div>
-                  </div>
-                </motion.article>
-
-                {/* Card 3: Wabrix (Peeking right beyond the 2-column edge) */}
-                <motion.article
-                  className="editorial-media-card"
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={VIEWPORT_ONCE}
-                  transition={{ duration: 0.55, delay: 0.18, ease: EASE_MORPH }}
-                  onClick={() =>
-                    setSystemsOffsetIndex((prev) => (prev === 0 ? 1 : 0))
-                  }
-                  style={{ cursor: 'pointer' }}
-                >
-                  <div className="card-media-backdrop card-media-backdrop--fragment">
-                    <TechnicalGridBackdrop accent="green" opacity={0.4} />
-                    <WabrixEdgeFragment />
-                  </div>
-                  <div className="photo-shade-scrim" />
-
-                  <div className="card-content-stack">
-                    <div className="card-text-group">
-                      <h3 className="type-card-heading">Wabrix</h3>
-                      <p className="type-body card-description">
-                        Edge webhook ingress on Cloudflare Workers and Hono, syncing
-                        reactive state through Convex for live operator takeover when
-                        automated message triage drops below confidence thresholds.
-                      </p>
-                    </div>
-                    <div className="card-date-tag-row">
-                      <span className="type-caption card-stack-icons-inline">
-                        <SkillLogo name="Next.js" size={14} variant="mono" />
-                        <SkillLogo name="Convex" size={14} variant="mono" />
-                        <SkillLogo
-                          name="Cloudflare Workers"
-                          size={14}
-                          variant="mono"
-                        />
-                        <SkillLogo name="Hono" size={14} variant="mono" />
-                        <span>Next.js · Convex · Cloudflare · Hono</span>
-                      </span>
-                      <a
-                        href="https://wabrix.nylo.me"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="type-caption card-outline-tag"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        wabrix.nylo.me ↗
                       </a>
                     </div>
                   </div>
