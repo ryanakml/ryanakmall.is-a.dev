@@ -583,6 +583,60 @@ function ScrollSeedLayer({
   );
 }
 
+/**
+ * Reusable hook enabling natural mouse drag-to-scroll on desktop
+ * while preserving touch momentum and horizontal trackpad swipe.
+ */
+function useDragToScroll() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    const onMouseDown = (e) => {
+      if (e.button !== 0 || e.target.closest('a, button')) return;
+      isDown = true;
+      startX = e.pageX - el.offsetLeft;
+      scrollLeft = el.scrollLeft;
+    };
+
+    const onMouseMove = (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - el.offsetLeft;
+      const walk = (x - startX) * 1.35;
+      el.scrollLeft = scrollLeft - walk;
+    };
+
+    const onMouseUp = () => {
+      isDown = false;
+    };
+
+    const onMouseLeave = () => {
+      isDown = false;
+    };
+
+    el.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    el.addEventListener('mouseleave', onMouseLeave);
+
+    return () => {
+      el.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      el.removeEventListener('mouseleave', onMouseLeave);
+    };
+  }, []);
+
+  return ref;
+}
+
 /* ==========================================================================
    Main Application Component
    ========================================================================== */
@@ -649,43 +703,30 @@ export default function App() {
   }, []);
 
   /* ------------------------------------------------------------------------
-     3. Engineering Build Rail Carousel State (687px cards, 9.4px gap)
+     3. Engineering Build Rail & Selected Systems Drag-to-Scroll Refs
      ------------------------------------------------------------------------ */
   const [activeRailIndex, setActiveRailIndex] = useState(0);
+  const heroRailRef = useDragToScroll();
+  const systemsRailRef = useDragToScroll();
 
   const handlePrevRail = () => {
-    setActiveRailIndex((prev) =>
-      prev === 0 ? BUILD_RAIL_ITEMS.length - 1 : prev - 1
-    );
+    if (heroRailRef.current) {
+      const card = heroRailRef.current.querySelector('.photo-rail-card');
+      const step = card ? card.clientWidth + 9.4 : 696;
+      heroRailRef.current.scrollBy({ left: -step, behavior: 'smooth' });
+    }
   };
 
   const handleNextRail = () => {
-    setActiveRailIndex((prev) =>
-      prev === BUILD_RAIL_ITEMS.length - 1 ? 0 : prev + 1
-    );
+    if (heroRailRef.current) {
+      const card = heroRailRef.current.querySelector('.photo-rail-card');
+      const step = card ? card.clientWidth + 9.4 : 696;
+      heroRailRef.current.scrollBy({ left: step, behavior: 'smooth' });
+    }
   };
 
   /* ------------------------------------------------------------------------
-     4. Selected Systems Horizontal Wheel/Scroll Handler
-     ------------------------------------------------------------------------ */
-  const handleSystemsWheel = useCallback((e) => {
-    if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && Math.abs(e.deltaY) > 4) {
-      const el = e.currentTarget;
-      const atStart = el.scrollLeft <= 2;
-      const atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 2;
-
-      if (e.deltaY > 0 && !atEnd) {
-        e.preventDefault();
-        el.scrollBy({ left: e.deltaY * 1.4, behavior: 'smooth' });
-      } else if (e.deltaY < 0 && !atStart) {
-        e.preventDefault();
-        el.scrollBy({ left: e.deltaY * 1.4, behavior: 'smooth' });
-      }
-    }
-  }, []);
-
-  /* ------------------------------------------------------------------------
-     5. Isolated Engineering Philosophy Quotation Carousel State
+     4. Isolated Engineering Philosophy Quotation Carousel State
      ------------------------------------------------------------------------ */
   const [quoteState, setQuoteState] = useState({ index: 0, direction: 1 });
 
@@ -704,7 +745,7 @@ export default function App() {
   };
 
   /* ------------------------------------------------------------------------
-     6. Direct Email / Message Field in Monumental Footer
+     5. Direct Email / Message Field in Monumental Footer
      ------------------------------------------------------------------------ */
   const [messageInput, setMessageInput] = useState('');
 
@@ -722,10 +763,6 @@ export default function App() {
   const isBurstStarted = introStage >= 4;
   const isClusterVisible = introStage >= 3;
   const activeQuote = PHILOSOPHY_QUOTES[quoteState.index];
-
-  /* Track translation formula centering the active 687px Build Rail card
-     with 9.4px gutters and peeking adjacent cards on both viewport edges */
-  const railTrackTransform = `translate3d(calc(50vw - (min(687px, 84vw) / 2) - ${activeRailIndex} * (min(687px, 84vw) + 9.4px)), 0, 0)`;
 
 
   return (
@@ -1033,6 +1070,7 @@ export default function App() {
           {/* 4. Horizontal Engineering Build Rail (687px cards, 9.4px gap) */}
           <motion.section
             className="photo-rail-viewport"
+            ref={heroRailRef}
             aria-label="Engineering architecture and build rail"
             initial={{ opacity: 0, y: 130 }}
             animate={
@@ -1040,16 +1078,27 @@ export default function App() {
             }
             transition={{ duration: 0.88, delay: 0.12, ease: EASE_MORPH }}
           >
-            <div
-              className="photo-rail-track"
-              style={{ transform: railTrackTransform }}
-            >
+            <div className="photo-rail-track">
               {BUILD_RAIL_ITEMS.map((item, idx) => (
                 <article
                   key={item.id}
                   className="photo-rail-card"
                   aria-current={idx === activeRailIndex ? 'true' : undefined}
-                  onClick={() => setActiveRailIndex(idx)}
+                  onClick={(e) => {
+                    if (e.target.closest('a')) return;
+                    setActiveRailIndex(idx);
+                    if (heroRailRef.current) {
+                      const cards =
+                        heroRailRef.current.querySelectorAll('.photo-rail-card');
+                      if (cards[idx]) {
+                        cards[idx].scrollIntoView({
+                          behavior: 'smooth',
+                          block: 'nearest',
+                          inline: 'center',
+                        });
+                      }
+                    }
+                  }}
                   style={{
                     cursor: idx === activeRailIndex ? 'default' : 'pointer',
                   }}
@@ -1171,7 +1220,7 @@ export default function App() {
 
             <div
               className="paired-cards-wrapper"
-              onWheel={handleSystemsWheel}
+              ref={systemsRailRef}
             >
               <div className="peeking-three-rail">
                 {/* Card 1: Wabrix */}
