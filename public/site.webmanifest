@@ -1,0 +1,16 @@
+{
+  "name": "Ryan Akmal Pasya: Full-Stack and Backend Engineer",
+  "short_name": "ryanakml",
+  "description": "Portfolio of Ryan Akmal Pasya. Full-stack and backend engineer building resilient web interfaces, Go workflow runtimes, and PostgreSQL transactional outbox systems.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#262d29",
+  "theme_color": "#f7f6e3",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

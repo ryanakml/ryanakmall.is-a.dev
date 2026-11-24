@@ -39,46 +39,11 @@ export function OrganicSeedBlob({
 }
 
 /**
- * Custom SVG Brand Logo for ryanakml:
- * Combines a #262d29 forest-charcoal rounded emblem with an architectural
- * butter-paper 'r' branching stem, a #fb5e00 hot-orange organic seed node,
- * and the lowercase Swiss grotesk logotype.
+ * Brand Logo Text for ryanakml:
+ * Clean, Swiss grotesk lowercase wordmark matching the masthead typography.
  */
 export function BrandLogoSVG() {
-  return (
-    <span className="brand-logo-lockup">
-      <svg
-        width="30"
-        height="30"
-        viewBox="0 0 64 64"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="brand-logo-mark-svg"
-        aria-hidden="true"
-      >
-        <rect width="64" height="64" rx="15" fill="#262d29" />
-        <path
-          d="M21 48V20M21 31C21 24.5 26.2 20 33.5 20H36"
-          stroke="#f7f6e3"
-          strokeWidth="5.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M21 38L34 48"
-          stroke="#f7f6e3"
-          strokeWidth="5"
-          strokeLinecap="round"
-        />
-        <path
-          d="M44.2 14.3C48.8 14.0 52.4 17.5 52.6 22.2C52.8 26.9 49.1 30.8 44.4 31.0C39.7 31.2 35.9 27.6 35.7 22.8C35.5 18.0 39.6 14.6 44.2 14.3Z"
-          fill="#fb5e00"
-        />
-        <circle cx="43.5" cy="46.5" r="3.5" fill="#ffff48" />
-      </svg>
-      <span className="brand-logo-text">ryanakml</span>
-    </span>
-  );
+  return <span className="brand-logo-text">ryanakml</span>;
 }
 
 /**
@@ -268,144 +233,374 @@ export function QuotePartnerMark({ name = 'ryanakml' }) {
 }
 
 /**
+ * Razor-sharp inline SVG architectural pipeline arrow for BuildRailSchematic.
+ */
+function SchematicArrow({ fenced = false }) {
+  return (
+    <div className={`rail-arrow ${fenced ? 'rail-arrow--fenced' : ''}`} aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+        {fenced ? (
+          <path
+            d="M4 10H14M14 10L10 6M14 10L10 14M16 5V15"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        ) : (
+          <path
+            d="M3 10H16M16 10L11 5M16 10L11 15"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        )}
+      </svg>
+    </div>
+  );
+}
+
+/**
  * Architectural & Terminal Showcase Overlays for the 4 Engineering Build Rail Cards
  * Marked with data-ui so they render crisp inspectable engineering diagrams over dark card plates.
  */
 export function BuildRailSchematic({ id }) {
-  if (id === 'flowdesk') {
-    return (
-      <div className="rail-schematic-overlay" data-ui="true">
-        <div className="rail-schematic-header">
-          <span className="rail-schematic-dot rail-schematic-dot--orange" />
-          <span className="rail-schematic-dot rail-schematic-dot--yellow" />
-          <span className="rail-schematic-title">
-            flowdesk-ai / transactional-outbox &amp; replay-runner
-          </span>
-          <span className="rail-schematic-badge">PASS · 105/105 specs</span>
-        </div>
-
-        <div className="rail-schematic-flow">
-          <div className="rail-node">
-            <span className="rail-node-tag">INGRESS</span>
-            <strong>WhatsApp Webhook</strong>
-            <span>HMAC-SHA256 + idempotency key</span>
-          </div>
-          <div className="rail-arrow">→</div>
-          <div className="rail-node rail-node--highlight">
-            <span className="rail-node-tag">POSTGRESQL TX</span>
-            <strong>Messages + Outbox</strong>
-            <span>Atomic commit · tenant_id RLS</span>
-          </div>
-          <div className="rail-arrow">→</div>
-          <div className="rail-node">
-            <span className="rail-node-tag">BULLMQ WORKER</span>
-            <strong>Relay &amp; AI Triage</strong>
-            <span>At-least-once delivery + backoff</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (id === 'deadbolt') {
-    return (
-      <div className="rail-schematic-overlay" data-ui="true">
-        <div className="rail-schematic-header">
-          <span className="rail-schematic-dot rail-schematic-dot--orange" />
-          <span className="rail-schematic-title">
-            deadbolt / go-control-plane / lease_fencing_test.go
-          </span>
-          <span className="rail-schematic-badge rail-schematic-badge--yellow">
-            EPOCH FENCE #05
-          </span>
-        </div>
-
-        <div className="rail-schematic-flow">
-          <div className="rail-node rail-node--muted">
-            <span className="rail-node-tag">WORKER A · STALE</span>
-            <strong>lease_epoch: 04</strong>
-            <span>Heartbeat expired → Write rejected</span>
-          </div>
-          <div className="rail-arrow">⇥</div>
-          <div className="rail-node rail-node--highlight">
-            <span className="rail-node-tag">POSTGRES + NATS</span>
-            <strong>Fencing Token Guard</strong>
-            <span>WHERE lease_epoch = current_epoch</span>
-          </div>
-          <div className="rail-arrow">→</div>
-          <div className="rail-node">
-            <span className="rail-node-tag">WORKER B · ACTIVE</span>
-            <strong>lease_epoch: 05</strong>
-            <span>Reclaimed step_02 → Committed</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (id === 'wabrix') {
-    return (
-      <div className="rail-schematic-overlay" data-ui="true">
-        <div className="rail-schematic-header">
-          <span className="rail-schematic-dot rail-schematic-dot--yellow" />
-          <span className="rail-schematic-title">
-            wabrix.nylo.me / edge-ingress + convex-realtime
-          </span>
-          <span className="rail-schematic-badge">EDGE · HONO + CONVEX</span>
-        </div>
-
-        <div className="rail-schematic-flow">
-          <div className="rail-node">
-            <span className="rail-node-tag">CLOUDFLARE WORKERS</span>
-            <strong>Hono Webhook Edge</strong>
-            <span>Zero-cold-start signature verify</span>
-          </div>
-          <div className="rail-arrow">→</div>
-          <div className="rail-node rail-node--highlight">
-            <span className="rail-node-tag">CONVEX STATE</span>
-            <strong>Reactive Thread Sync</strong>
-            <span>Deterministic state &amp; AI draft</span>
-          </div>
-          <div className="rail-arrow">→</div>
-          <div className="rail-node">
-            <span className="rail-node-tag">NEXT.JS OPERATOR UI</span>
-            <strong>Human Handoff</strong>
-            <span>Live takeover on confidence drop</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const configs = {
+    flowdesk: {
+      title: 'flowdesk-ai / transactional-outbox',
+      badge: 'PASS · 105 SPECS',
+      nodes: [
+        { tag: 'INGRESS', title: 'Webhook Event', meta: 'HMAC Validated' },
+        { tag: 'POSTGRES', title: 'Transactional Outbox', meta: 'Atomic RLS Commit', active: true },
+        { tag: 'WORKER', title: 'BullMQ Replay', meta: 'Zero Lost Events' },
+      ],
+    },
+    deadbolt: {
+      title: 'deadbolt / lease-fencing',
+      badge: 'EPOCH GUARD #05',
+      nodes: [
+        { tag: 'WORKER A', title: 'Stale Heartbeat', meta: 'Epoch 04 (Expired)', stale: true },
+        { tag: 'GUARD', title: 'Lease Token Guard', meta: 'Fence Zombie Writes', active: true },
+        { tag: 'WORKER B', title: 'Active Leader', meta: 'Epoch 05 (Committed)' },
+      ],
+    },
+    wabrix: {
+      title: 'wabrix.nylo.me / edge-ingress',
+      badge: 'EDGE · 12ms',
+      nodes: [
+        { tag: 'EDGE', title: 'Hono Webhook', meta: 'Cloudflare Workers' },
+        { tag: 'STATE', title: 'Convex Thread Sync', meta: 'Realtime Reactive', active: true },
+        { tag: 'OPERATOR', title: 'Live Handoff', meta: 'Confidence Triage' },
+      ],
+    },
+  };
+  const cfg = configs[id] || configs.flowdesk;
 
   return (
-    <div className="rail-schematic-overlay" data-ui="true">
-      <div className="rail-schematic-header">
-        <span className="rail-schematic-dot rail-schematic-dot--orange" />
-        <span className="rail-schematic-title">
-          syntrop / sqlite-wal + causal-dag-memory
-        </span>
-        <span className="rail-schematic-badge rail-schematic-badge--yellow">
-          LOCAL-FIRST DAG
-        </span>
+    <div className="hero-rail-node-canvas" data-ui="true">
+      <div className="hero-rail-top-bar">
+        <div className="hero-rail-traffic">
+          <span className="dot dot--orange" />
+          <span className="dot dot--yellow" />
+        </div>
+        <span className="hero-rail-path">{cfg.title}</span>
+        <span className="hero-rail-badge">{cfg.badge}</span>
       </div>
 
-      <div className="rail-schematic-flow">
-        <div className="rail-node">
-          <span className="rail-node-tag">NODE 01 · DECISION</span>
-          <strong>Schema Boundary</strong>
-          <span>sha256: 7c91a4 · parent: root</span>
+      <div className="hero-rail-nodes-track">
+        {cfg.nodes.map((node, i) => (
+          <React.Fragment key={node.title}>
+            <div
+              className={`hero-node-box ${
+                node.active ? 'hero-node-box--active' : ''
+              } ${node.stale ? 'hero-node-box--stale' : ''}`}
+            >
+              <span className="hero-node-tag">{node.tag}</span>
+              <strong className="hero-node-title">{node.title}</strong>
+              <span className="hero-node-meta">{node.meta}</span>
+            </div>
+            {i < cfg.nodes.length - 1 && (
+              <div className="hero-connector-wire">
+                <svg width="44" height="12" viewBox="0 0 44 12" fill="none">
+                  <line
+                    x1="0"
+                    y1="6"
+                    x2="44"
+                    y2="6"
+                    stroke="rgba(247, 246, 227, 0.25)"
+                    strokeWidth="1.5"
+                    strokeDasharray="3 3"
+                  />
+                  <circle
+                    cx="22"
+                    cy="6"
+                    r="3"
+                    fill="var(--color-yellow)"
+                    className="pulse-signal-dot"
+                  />
+                </svg>
+              </div>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Zoomed-in WhatsApp + RAG Grounded Interaction Fragment for FlowDesk AI.
+ * Replaces shrunk landing page screenshots with a crisp, 100% readable product interaction.
+ */
+export function FlowDeskChatFragment() {
+  return (
+    <div className="flowdesk-chat-fragment" data-ui="true">
+      <div className="fragment-header">
+        <span className="fragment-dot fragment-dot--green" />
+        <span className="fragment-title">WhatsApp Live Webhook &amp; Outbox Pipeline</span>
+        <span className="fragment-status-badge">PASS · 105/105</span>
+      </div>
+
+      <div className="fragment-chat-canvas">
+        {/* User Incoming WhatsApp Message */}
+        <div className="chat-bubble chat-bubble--incoming">
+          <p className="chat-bubble-text">
+            “Can we guarantee zero lost messages on webhook network timeout?”
+          </p>
+          <span className="chat-bubble-meta">10:42 AM · +62 812-4491-0021 ✓✓</span>
         </div>
-        <div className="rail-arrow">→</div>
-        <div className="rail-node rail-node--highlight">
-          <span className="rail-node-tag">NODE 02 · INVARIANT</span>
-          <strong>SQLite FTS5 + DAG</strong>
-          <span>Causal traversal · zero network drift</span>
+
+        {/* System RAG Grounded & Outbox Response */}
+        <div className="chat-bubble chat-bubble--grounded">
+          <div className="grounded-badge-row">
+            <span className="grounded-pill">⚡ ATOMIC OUTBOX VERIFIED</span>
+            <span className="grounded-latency">42ms · Postgres RLS</span>
+          </div>
+          <p className="chat-bubble-text">
+            Outbox event persisted in the same ACID commit as message payload.
+            BullMQ workers execute deterministic replays on transient webhook failures.
+          </p>
+          <div className="grounded-source-row">
+            <span className="grounded-file">schema.sql:outbox_events</span>
+            <span className="grounded-spec">replay_test.ts: pass</span>
+          </div>
         </div>
-        <div className="rail-arrow">→</div>
-        <div className="rail-node">
-          <span className="rail-node-tag">NODE 03 · VERIFY</span>
-          <strong>Agent Recall Slice</strong>
-          <span>Deterministic context assembly</span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Native SVG & HTML Distributed Lease Fencing Diagram for Deadbolt.
+ * Replaces blurry presentation slide images with a sharp, Stripe/Linear quality visual.
+ */
+export function DeadboltFencingDiagram() {
+  return (
+    <div className="deadbolt-fencing-canvas" data-ui="true">
+      <div className="deadbolt-fencing-header">
+        <span className="fragment-dot fragment-dot--orange" />
+        <span className="deadbolt-fencing-title">DISTRIBUTED LEASE FENCING PROTOCOL</span>
+        <span className="deadbolt-epoch-badge">EPOCH FENCE #05</span>
+      </div>
+
+      <div className="deadbolt-lanes-container">
+        {/* Worker A (Zombie / Stale) */}
+        <div className="deadbolt-lane deadbolt-lane--stale">
+          <div className="deadbolt-worker-card deadbolt-worker-card--stale">
+            <div className="worker-header">
+              <span className="worker-status-badge worker-status-badge--stale">ZOMBIE</span>
+              <strong className="worker-name">Worker A</strong>
+            </div>
+            <span className="worker-epoch">lease_epoch: 04 (expired)</span>
+          </div>
+          <div className="deadbolt-arrow-line deadbolt-arrow-line--blocked">
+            <span className="deadbolt-barrier-action">✕ WRITE BLOCKED</span>
+          </div>
+        </div>
+
+        {/* The Fence Guard */}
+        <div className="deadbolt-fence-divider">
+          <div className="fence-pillar">
+            <span className="fence-label">FENCING TOKEN GUARD</span>
+            <span className="fence-condition">WHERE epoch == 05</span>
+          </div>
+        </div>
+
+        {/* Worker B (Active Leader) */}
+        <div className="deadbolt-lane deadbolt-lane--active">
+          <div className="deadbolt-worker-card deadbolt-worker-card--active">
+            <div className="worker-header">
+              <span className="worker-status-badge worker-status-badge--active">LEADER</span>
+              <strong className="worker-name">Worker B</strong>
+            </div>
+            <span className="worker-epoch">lease_epoch: 05 (valid)</span>
+          </div>
+          <div className="deadbolt-arrow-line deadbolt-arrow-line--permitted">
+            <span className="deadbolt-barrier-action">✔ COMMITTED TO DB</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="deadbolt-footer-invariant">
+        <span>INVARIANT: Monotonic token rejects split-brain writes during partition</span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Zoomed-in Edge Webhook Ingress & Live Operator Handoff Fragment for Wabrix.
+ */
+export function WabrixEdgeFragment() {
+  return (
+    <div className="wabrix-edge-fragment" data-ui="true">
+      <div className="fragment-header">
+        <span className="fragment-dot fragment-dot--yellow" />
+        <span className="fragment-title">Cloudflare Workers Edge · 12ms Ingress</span>
+        <span className="fragment-status-badge">HONO + CONVEX</span>
+      </div>
+
+      <div className="wabrix-steps-stack">
+        <div className="wabrix-step-row">
+          <span className="step-badge">INGRESS</span>
+          <span className="step-name">POST /v1/webhooks/whatsapp</span>
+          <span className="step-status">HMAC SHA-256 ✔</span>
+        </div>
+        <div className="wabrix-step-row wabrix-step-row--alert">
+          <span className="step-badge step-badge--alert">CONFIDENCE</span>
+          <span className="step-name">AI Triage: 58% (&lt; 80% Threshold)</span>
+          <span className="step-status step-status--alert">TAKEOVER REQUIRED</span>
+        </div>
+        <div className="wabrix-step-row wabrix-step-row--handoff">
+          <span className="step-badge step-badge--handoff">CONVEX SYNC</span>
+          <span className="step-name">Thread Routed to Operator Dashboard</span>
+          <span className="step-status step-status--handoff">OPERATOR LIVE</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Curated PR Stack UI
+ * Replaces blurry, microscopic GitHub window screenshots with 3 bold, legible PR rows
+ * and a subtle fade-out row at 13-14px font size.
+ */
+export function CuratedPRStack() {
+  const PRS = [
+    {
+      repo: 'mastra-ai/mastra',
+      pr: '#15346',
+      title: 'Fix approval-callback routing in human-in-the-loop workflows',
+      diff: '+28 -4',
+      badge: 'Merged',
+    },
+    {
+      repo: 'celery/celery',
+      pr: '#10739',
+      title: 'Expand multi-worker paths with home directory shorthand (~)',
+      diff: '+19 -2',
+      badge: 'Merged',
+    },
+    {
+      repo: 'all-hands-ai/OpenHands',
+      pr: '#12223',
+      title: 'Resolve terminal stream chunk parser regression on replay',
+      diff: '+45 -11',
+      badge: 'Merged',
+    },
+  ];
+
+  return (
+    <div className="curated-pr-stack-canvas" data-ui="true">
+      <div className="curated-pr-header">
+        <div className="curated-pr-lights">
+          <span className="dot dot--red" />
+          <span className="dot dot--yellow" />
+          <span className="dot dot--green" />
+        </div>
+        <span className="curated-pr-header-title">
+          upstream contributions · git log --merges
+        </span>
+        <span className="curated-pr-count-badge">9 MERGED PRs</span>
+      </div>
+
+      <div className="curated-pr-list">
+        {PRS.map((item) => (
+          <div key={item.pr} className="curated-pr-row">
+            <div className="curated-pr-row-top">
+              <span className="curated-pr-repo">{item.repo}</span>
+              <span className="curated-pr-badge-merged">{item.badge}</span>
+            </div>
+            <div className="curated-pr-row-title">
+              <span className="curated-pr-num">{item.pr}</span>
+              <span className="curated-pr-text">{item.title}</span>
+            </div>
+            <div className="curated-pr-row-meta">
+              <span className="curated-pr-diff">{item.diff}</span>
+              <span className="curated-pr-verified">Tested &amp; Merged upstream</span>
+            </div>
+          </div>
+        ))}
+
+        {/* Fade-out 4th row indicating additional PRs */}
+        <div className="curated-pr-fade-row">
+          <span>+6 more merged PRs across Django (#22093), SciPy, Pylint, Typeshed ↗</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Engineering Profile & Practice Card (How I Build & Available Roles)
+ * Clean, human, authentic engineer scorecard + workflow philosophy.
+ * Replaces disconnected architecture diagrams with a clear, relevant profile overview.
+ */
+export function EngineerProfilePractice() {
+  return (
+    <div className="engineer-profile-canvas" data-ui="true">
+      <div className="engineer-profile-header">
+        <div className="engineer-profile-badge-row">
+          <span className="profile-status-indicator" />
+          <span className="profile-status-text">AVAILABLE · REMOTE / HYBRID</span>
+        </div>
+        <span className="profile-tz-pill">UTC+7 · ACEH</span>
+      </div>
+
+      <div className="engineer-spec-grid">
+        <div className="engineer-spec-item">
+          <span className="spec-label">FOCUS</span>
+          <strong className="spec-val">Full-Stack &amp; Distributed Backend</strong>
+        </div>
+        <div className="engineer-spec-item">
+          <span className="spec-label">BACKGROUND</span>
+          <strong className="spec-val">Data Science &amp; MLOps ➔ Web Systems</strong>
+        </div>
+      </div>
+
+      <div className="engineer-principles-list">
+        <div className="principle-item">
+          <span className="principle-bullet">01</span>
+          <div className="principle-content">
+            <strong>Contracts First:</strong>
+            <span>Schema validation &amp; strict typing before writing handlers.</span>
+          </div>
+        </div>
+        <div className="principle-item">
+          <span className="principle-bullet">02</span>
+          <div className="principle-content">
+            <strong>Deterministic Replays:</strong>
+            <span>Replay runners verify zero-data-loss failure recovery.</span>
+          </div>
+        </div>
+        <div className="principle-item">
+          <span className="principle-bullet">03</span>
+          <div className="principle-content">
+            <strong>Upstream Discipline:</strong>
+            <span>Reproduce bugs with minimal test specs before fixing.</span>
+          </div>
         </div>
       </div>
     </div>
@@ -442,3 +637,204 @@ export function MonumentalWordmark() {
     </svg>
   );
 }
+
+/**
+ * Subtle architectural coordinate/dot grid backdrop for technical cards.
+ * Zero external asset requests, crisp vector rendering on all display densities.
+ */
+export function TechnicalGridBackdrop({ accent = 'orange', opacity = 0.5 }) {
+  const glowColor =
+    accent === 'yellow'
+      ? 'rgba(255, 255, 72, 0.1)'
+      : accent === 'green'
+      ? 'rgba(63, 185, 80, 0.12)'
+      : 'rgba(251, 94, 0, 0.1)';
+
+  return (
+    <div
+      className="technical-grid-backdrop"
+      style={{
+        position: 'absolute',
+        inset: 0,
+        pointerEvents: 'none',
+        overflow: 'hidden',
+        backgroundColor: '#181d1a',
+      }}
+      aria-hidden="true"
+    >
+      <svg
+        width="100%"
+        height="100%"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ opacity }}
+      >
+        <defs>
+          <pattern
+            id={`tech-grid-${accent}`}
+            width="28"
+            height="28"
+            patternUnits="userSpaceOnUse"
+          >
+            <circle cx="2" cy="2" r="0.85" fill="rgba(247, 246, 227, 0.22)" />
+            <path
+              d="M 28 0 L 0 0 0 28"
+              fill="none"
+              stroke="rgba(247, 246, 227, 0.035)"
+              strokeWidth="0.8"
+            />
+          </pattern>
+          <radialGradient
+            id={`glow-${accent}`}
+            cx="80%"
+            cy="20%"
+            r="60%"
+            fx="80%"
+            fy="20%"
+          >
+            <stop offset="0%" stopColor={glowColor} />
+            <stop offset="100%" stopColor="rgba(24, 29, 26, 0)" />
+          </radialGradient>
+        </defs>
+        <rect width="100%" height="100%" fill={`url(#glow-${accent})`} />
+        <rect width="100%" height="100%" fill={`url(#tech-grid-${accent})`} />
+      </svg>
+    </div>
+  );
+}
+
+/**
+ * Upstream Contributions Terminal Canvas
+ * Replaces generic cafe stock photos with an authentic GitHub PR inspector showing
+ * merged upstream pull requests with repo badges, commit diffs, and verification pills.
+ */
+export function UpstreamContributionsTerminal() {
+  const PRS = [
+    {
+      repo: 'mastra-ai/mastra',
+      pr: '#15346',
+      title: 'Fix approval-callback routing in human-in-the-loop workflows',
+      diff: '+28 -4',
+      tag: 'TypeScript · Core',
+    },
+    {
+      repo: 'celery/celery',
+      pr: '#10739',
+      title: 'Expand multi-worker path configurations with home shorthand',
+      diff: '+19 -2',
+      tag: 'Python · Distributed',
+    },
+    {
+      repo: 'django/django',
+      pr: '#22093',
+      title: 'Clarify upload-size multipart boundary verification in docs',
+      diff: '+14 -1',
+      tag: 'Python · Framework',
+    },
+    {
+      repo: 'all-hands-ai/OpenHands',
+      pr: '#12223',
+      title: 'Resolve terminal stream chunk parser regression on replay',
+      diff: '+45 -11',
+      tag: 'Python · Agent Runtime',
+    },
+  ];
+
+  return (
+    <div className="upstream-terminal-canvas" data-ui="true">
+      <div className="upstream-terminal-header">
+        <div className="upstream-terminal-traffic-lights">
+          <span className="dot dot--red" />
+          <span className="dot dot--yellow" />
+          <span className="dot dot--green" />
+        </div>
+        <span className="upstream-terminal-title">
+          github.com/search?q=author:ryanakml+is:merged
+        </span>
+        <span className="upstream-terminal-badge">
+          <span className="upstream-terminal-status-glow" /> 9 MERGED UPSTREAM
+        </span>
+      </div>
+
+      <div className="upstream-terminal-body">
+        {PRS.map((item) => (
+          <div key={item.pr} className="upstream-pr-card">
+            <div className="upstream-pr-top">
+              <span className="upstream-pr-repo">{item.repo}</span>
+              <span className="upstream-pr-badge-merged">MERGED</span>
+            </div>
+            <div className="upstream-pr-title">
+              <span className="upstream-pr-number">{item.pr}</span>
+              <span>{item.title}</span>
+            </div>
+            <div className="upstream-pr-meta">
+              <span className="upstream-pr-tag">{item.tag}</span>
+              <span className="upstream-pr-diff">{item.diff}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Engineering Invariants & Execution Matrix
+ * Replaces generic notebook/coffee desk photos with an authentic architectural
+ * reliability scorecard detailing core engineering standards and production discipline.
+ */
+export function EngineeringInvariantsMatrix() {
+  const INVARIANTS = [
+    {
+      code: 'TX-OUTBOX',
+      label: 'ATOMIC OUTBOX PATTERN',
+      desc: 'Single ACID transaction for PostgreSQL state mutation + outbox enqueue. Eliminates dual-write divergence.',
+      pill: 'ZERO LOSS',
+    },
+    {
+      code: 'EPOCH-FENCE',
+      label: 'LEASE FENCING & TOKEN GUARDS',
+      desc: 'Monotonic epoch counters reject stale heartbeat writes from zombie workers during network partitions.',
+      pill: 'FAULT TOLERANT',
+    },
+    {
+      code: 'REPLAY-HARNESS',
+      label: 'DETERMINISTIC REPLAY HARNESS',
+      desc: 'Deterministic webhook replays against ephemeral sandbox DBs verify idempotency and error boundaries.',
+      pill: 'REPRODUCIBLE',
+    },
+    {
+      code: 'UPSTREAM-SPEC',
+      label: 'UPSTREAM-FIRST DISCIPLINE',
+      desc: 'Isolate production edge cases into minimal reproduction test suites before shipping patches upstream.',
+      pill: 'TEST-DRIVEN',
+    },
+  ];
+
+  return (
+    <div className="invariants-matrix-canvas" data-ui="true">
+      <div className="invariants-matrix-header">
+        <div className="invariants-header-left">
+          <span className="invariants-dot-indicator" />
+          <span className="invariants-spec-title">
+            ENGINEERING EXECUTION SPEC · INVARIANTS
+          </span>
+        </div>
+        <span className="invariants-status-tag">SYSTEMS READY</span>
+      </div>
+
+      <div className="invariants-matrix-list">
+        {INVARIANTS.map((inv) => (
+          <div key={inv.code} className="invariant-row">
+            <div className="invariant-row-header">
+              <span className="invariant-num">{inv.code}</span>
+              <span className="invariant-label">{inv.label}</span>
+              <span className="invariant-pill">{inv.pill}</span>
+            </div>
+            <p className="invariant-desc">{inv.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+

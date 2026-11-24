@@ -21,6 +21,12 @@ import {
   QuotePartnerMark,
   BuildRailSchematic,
   MonumentalWordmark,
+  TechnicalGridBackdrop,
+  FlowDeskChatFragment,
+  DeadboltFencingDiagram,
+  WabrixEdgeFragment,
+  CuratedPRStack,
+  EngineerProfilePractice,
 } from './components/Graphics';
 import {
   SkillIconsProvider,
@@ -111,39 +117,30 @@ const HERO_SEEDS = [
 const BUILD_RAIL_ITEMS = [
   {
     id: 'flowdesk',
-    image: '/images/rail-1.jpg',
     alt: 'FlowDesk AI transactional outbox architecture and webhook replay runner',
     caption:
       'FlowDesk AI · Multi-tenant WhatsApp inbox with PostgreSQL transactional outbox & replay tests',
     repoLabel: 'flowdesk-ai ↗',
     repoHref: 'https://github.com/ryanakml/flowdesk-ai',
+    accent: 'yellow',
   },
   {
     id: 'deadbolt',
-    image: '/images/deadbolt-demo-poster.webp',
     alt: 'Deadbolt collaborative Go workflow engine lease fencing and recovery check',
     caption:
-      'Deadbolt · Go workflow engine exploring worker leases, fencing tokens & failure recovery',
+      'Deadbolt · Collaborative Go workflow engine exploring worker leases, fencing tokens & failure recovery',
     repoLabel: 'Deadbolt ↗',
     repoHref: 'https://github.com/ryanakml/Deadbolt',
+    accent: 'orange',
   },
   {
     id: 'wabrix',
-    image: '/images/rail-2.jpg',
     alt: 'Wabrix edge webhook ingress on Cloudflare Workers and Hono with Convex state',
     caption:
-      'Wabrix · Cloudflare Workers + Hono webhook ingress with Convex real-time state & AI handoff',
+      'Wabrix · Edge webhook ingress on Cloudflare Workers and Hono with Convex real-time state & AI handoff',
     repoLabel: 'wabrix.nylo.me ↗',
     repoHref: 'https://wabrix.nylo.me',
-  },
-  {
-    id: 'syntrop',
-    image: '/images/rail-3.jpg',
-    alt: 'Syntrop deterministic local-first SQLite and causal DAG operational memory engine',
-    caption:
-      'Syntrop · Local-first operational memory engine (SQLite + causal DAGs) for AI coding agents',
-    repoLabel: 'syntrop ↗',
-    repoHref: 'https://github.com/ryanakml/syntrop',
+    accent: 'green',
   },
 ];
 
@@ -175,14 +172,14 @@ const PROOF_METRICS = [
     label: 'Merged pull requests in upstream open-source repos',
   },
   {
-    value: 4,
+    value: 3,
     suffix: '',
-    label: 'Full-stack applications & workflow engines built',
+    label: 'Full-stack applications and workflow systems shipped',
   },
   {
     value: 3,
     suffix: '',
-    label: 'IBM & Google full-stack and data certifications',
+    label: 'Professional full-stack and data certifications',
   },
 ];
 
@@ -207,21 +204,21 @@ const PHILOSOPHY_QUOTES = [
   {
     id: 'phil-1',
     quote:
-      '"I want to understand the full path of a feature—from a user action, through the API and database, into background jobs, and back to the interface."',
+      '"I want to understand the entire lifecycle of a feature: from user interaction and API validation, down to database transactions and background workers, and back to the client state."',
     attribution: 'Ryan Akmal Pasya · Full-Stack & Backend Focus',
     tag: 'ryanakml',
   },
   {
     id: 'phil-2',
     quote:
-      '"Workers shouldn’t simply assume they still own a job—clear leases, fencing, and database state boundaries are what make recovery safe."',
+      '"Workers must never assume they still own a job. Heartbeat leases, fencing tokens, and explicit database transaction boundaries are what keep recovery safe when networks partition."',
     attribution: 'Lessons from Deadbolt · Workflow Exploration',
     tag: 'Deadbolt',
   },
   {
     id: 'phil-3',
     quote:
-      '"AI accelerates planning and implementation, while my focus stays on tracing system flow, understanding tradeoffs, and proving behavior with tests."',
+      '"AI tools speed up exploration and syntax generation, but system architecture requires human scrutiny. My focus stays on verifying data flow, weighing operational tradeoffs, and proving edge-case behavior with tests."',
     attribution: 'Engineering Workflow · Aceh, Indonesia',
     tag: 'Practice',
   },
@@ -446,7 +443,7 @@ function RuledSectionIntro({
 
 export default function App() {
   /* ------------------------------------------------------------------------
-     1. Video-Exact 4-Stage Intro Preloader State Machine (0ms – 4850ms)
+     1. Video-Exact 4-Stage Intro Preloader State Machine (0ms - 4850ms)
      ------------------------------------------------------------------------ */
   const [introStage, setIntroStage] = useState(1);
   const [introRunId, setIntroRunId] = useState(0);
@@ -616,7 +613,7 @@ export default function App() {
      with 9.4px gutters and peeking adjacent cards on both viewport edges */
   const railTrackTransform = `translate3d(calc(50vw - (min(687px, 84vw) / 2) - ${activeRailIndex} * (min(687px, 84vw) + 9.4px)), 0, 0)`;
 
-  /* Selected Systems 3-card track shift when inspecting Card 3 ("Wabrix & Syntrop") */
+  /* Selected Systems 3-card track shift when inspecting Card 3 ("Wabrix") */
   const systemsRailTransform =
     systemsOffsetIndex === 1 && scrollState.vw > 991
       ? 'translate3d(calc(-50% - 4.7px), 0, 0)'
@@ -931,8 +928,9 @@ export default function App() {
               }
               transition={{ duration: 0.85, delay: 0.08, ease: EASE_MORPH }}
             >
-              I build both sides of the loading spinner—web interfaces, APIs,
-              and the background jobs that keep them resilient when things fail.
+              I build both sides of the loading spinner: responsive web
+              interfaces upfront, and the background jobs, databases, and APIs
+              that keep them reliable when things break.
             </motion.h1>
 
             <motion.div
@@ -1005,7 +1003,7 @@ export default function App() {
                     cursor: idx === activeRailIndex ? 'default' : 'pointer',
                   }}
                 >
-                  <img src={item.image} alt={item.alt} loading="eager" />
+                  <TechnicalGridBackdrop accent={item.accent} opacity={0.55} />
                   <BuildRailSchematic id={item.id} />
                   <div className="photo-shade-scrim" />
                   <div className="photo-rail-caption">
@@ -1104,7 +1102,7 @@ export default function App() {
               6A. Chapter 1: "Selected Systems" (687x790px cards, 9.4px gap)
               - Card 1: FlowDesk AI (#ffff48 dot + "Systems & Outbox")
               - Card 2: Deadbolt (In Progress) (#fb5e00 quote + "Go & Distributed State")
-              - Card 3: Wabrix & Syntrop (Peeking right + "Managed Edge & AI")
+              - Card 3: Wabrix (Peeking right + "Managed Edge & AI")
               ================================================================ */}
           <section
             id="systems"
@@ -1114,7 +1112,7 @@ export default function App() {
             <RuledSectionIntro
               variant="heading"
               title="Selected Systems"
-              support="Full-stack web applications, distributed workflow explorations, and local-first developer tools."
+              support="Full-stack web applications, distributed workflow explorations, and edge ingress systems."
               linkLabel="All repositories ↗"
               linkHref="https://github.com/ryanakml"
               external={true}
@@ -1127,7 +1125,7 @@ export default function App() {
                   className="type-caption outline-button"
                 >
                   {systemsOffsetIndex === 0
-                    ? 'Slide to Wabrix & Syntrop →'
+                    ? 'Slide to Wabrix →'
                     : '← Back to FlowDesk & Deadbolt'}
                 </button>
               }
@@ -1138,7 +1136,7 @@ export default function App() {
                 className="peeking-three-rail"
                 style={{ transform: systemsRailTransform }}
               >
-                {/* Card 1: FlowDesk AI (Editorial cover variant with #ffff48 accent dot) */}
+                {/* Card 1: FlowDesk AI (Zoomed-in WhatsApp + RAG Outbox interaction fragment) */}
                 <motion.article
                   className="editorial-media-card"
                   initial={{ opacity: 0, y: 24 }}
@@ -1146,14 +1144,9 @@ export default function App() {
                   viewport={VIEWPORT_ONCE}
                   transition={{ duration: 0.55, delay: 0, ease: EASE_MORPH }}
                 >
-                  <div className="card-media-backdrop cover-art-botanical">
-                    <img
-                      src="/images/editorial-botanical.jpg"
-                      alt="FlowDesk AI multi-tenant WhatsApp support platform cover study"
-                    />
-                  </div>
-                  <div className="cover-art-center-yellow-blob">
-                    <OrganicSeedBlob variant={2} size={56} color="#ffff48" />
+                  <div className="card-media-backdrop card-media-backdrop--fragment">
+                    <TechnicalGridBackdrop accent="yellow" opacity={0.4} />
+                    <FlowDeskChatFragment />
                   </div>
                   <div className="photo-shade-scrim" />
 
@@ -1161,9 +1154,11 @@ export default function App() {
                     <div className="card-text-group">
                       <h3 className="type-card-heading">FlowDesk AI</h3>
                       <p className="type-body card-description">
-                        Multi-tenant WhatsApp inbox built with React, Express,
-                        PostgreSQL transactional outbox, and Redis workers,
-                        backed by tenant isolation and replay tests.
+                        Multi-tenant WhatsApp support platform built around
+                        reliable messaging. Uses PostgreSQL row-level security
+                        for tenant isolation, an atomic transactional outbox to
+                        prevent lost webhook dispatches, and BullMQ workers with
+                        deterministic replay testing.
                       </p>
                     </div>
                     <div className="card-date-tag-row">
@@ -1186,7 +1181,7 @@ export default function App() {
                   </div>
                 </motion.article>
 
-                {/* Card 2: Deadbolt (In Progress) (Editorial cover variant with orange pull-quote) */}
+                {/* Card 2: Deadbolt (In Progress) (Native Stripe/Linear-grade lease fencing diagram) */}
                 <motion.article
                   className="editorial-media-card"
                   initial={{ opacity: 0, y: 24 }}
@@ -1194,16 +1189,10 @@ export default function App() {
                   viewport={VIEWPORT_ONCE}
                   transition={{ duration: 0.55, delay: 0.09, ease: EASE_MORPH }}
                 >
-                  <div className="card-media-backdrop cover-art-architectural">
-                    <img
-                      src="/images/editorial-arch.jpg"
-                      alt="Deadbolt distributed Go workflow engine architectural cover art"
-                    />
+                  <div className="card-media-backdrop card-media-backdrop--fragment">
+                    <TechnicalGridBackdrop accent="orange" opacity={0.4} />
+                    <DeadboltFencingDiagram />
                   </div>
-                  <blockquote className="cover-art-embedded-quote">
-                    “What happens when a worker pauses mid-step, loses its
-                    lease, and wakes up thinking it still owns the job?”
-                  </blockquote>
                   <div className="photo-shade-scrim" />
 
                   <div className="card-content-stack">
@@ -1212,9 +1201,11 @@ export default function App() {
                         Deadbolt (In Progress)
                       </h3>
                       <p className="type-body card-description">
-                        Collaborative Go workflow engine exploring safe job
-                        recovery with PostgreSQL state, NATS JetStream, worker
-                        leases, and fencing tokens.
+                        Collaborative Go workflow engine exploring fault-tolerant
+                        job execution. Pairs PostgreSQL state persistence with
+                        NATS JetStream, using heartbeat leases and fencing tokens
+                        to prevent zombie workers from corrupting state during
+                        network partitions.
                       </p>
                     </div>
                     <div className="card-date-tag-row">
@@ -1234,13 +1225,13 @@ export default function App() {
                         rel="noreferrer"
                         className="type-caption card-outline-tag"
                       >
-                        Go &amp; Distributed State
+                        Go &amp; Distributed Systems
                       </a>
                     </div>
                   </div>
                 </motion.article>
 
-                {/* Card 3: Wabrix & Syntrop (Peeking right beyond the 2-column edge) */}
+                {/* Card 3: Wabrix (Peeking right beyond the 2-column edge) */}
                 <motion.article
                   className="editorial-media-card"
                   initial={{ opacity: 0, y: 24 }}
@@ -1252,24 +1243,19 @@ export default function App() {
                   }
                   style={{ cursor: 'pointer' }}
                 >
-                  <div className="card-media-backdrop cover-art-edge">
-                    <img
-                      src="/images/wabrix.png"
-                      alt="Wabrix and Syntrop edge ingress and deterministic SQLite DAG memory"
-                    />
-                  </div>
-                  <div className="cover-art-center-yellow-blob">
-                    <OrganicSeedBlob variant={4} size={48} color="#fb5e00" />
+                  <div className="card-media-backdrop card-media-backdrop--fragment">
+                    <TechnicalGridBackdrop accent="green" opacity={0.4} />
+                    <WabrixEdgeFragment />
                   </div>
                   <div className="photo-shade-scrim" />
 
                   <div className="card-content-stack">
                     <div className="card-text-group">
-                      <h3 className="type-card-heading">Wabrix &amp; Syntrop</h3>
+                      <h3 className="type-card-heading">Wabrix</h3>
                       <p className="type-body card-description">
-                        Wabrix runs edge AI support on Next.js, Convex, and
-                        Cloudflare Workers (wabrix.nylo.me); Syntrop provides
-                        local-first SQLite + DAG agent memory.
+                        Edge webhook ingress on Cloudflare Workers and Hono, syncing
+                        reactive state through Convex for live operator takeover when
+                        automated message triage drops below confidence thresholds.
                       </p>
                     </div>
                     <div className="card-date-tag-row">
@@ -1281,8 +1267,8 @@ export default function App() {
                           size={14}
                           variant="mono"
                         />
-                        <SkillLogo name="SQLite" size={14} variant="mono" />
-                        <span>Next.js · Convex · Cloudflare · SQLite</span>
+                        <SkillLogo name="Hono" size={14} variant="mono" />
+                        <span>Next.js · Convex · Cloudflare · Hono</span>
                       </span>
                       <a
                         href="https://wabrix.nylo.me"
@@ -1291,7 +1277,7 @@ export default function App() {
                         className="type-caption card-outline-tag"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        Managed Edge &amp; AI
+                        wabrix.nylo.me ↗
                       </a>
                     </div>
                   </div>
@@ -1328,19 +1314,9 @@ export default function App() {
                 viewport={VIEWPORT_ONCE}
                 transition={{ duration: 0.55, delay: 0, ease: EASE_MORPH }}
               >
-                <div className="card-media-backdrop">
-                  <img
-                    src="/images/showcase-1.jpg"
-                    alt="Upstream open-source contributions ledger across Python and TypeScript ecosystems"
-                  />
-                </div>
-                <div className="card-upstream-ledger" data-ui="true">
-                  {UPSTREAM_MERGED_PRS.map((item) => (
-                    <div key={item.repo} className="pr-pill-row">
-                      <span>{item.repo}</span>
-                      <span className="pr-pill-num">{item.pr}</span>
-                    </div>
-                  ))}
+                <div className="card-media-backdrop card-media-backdrop--stack">
+                  <TechnicalGridBackdrop accent="green" opacity={0.35} />
+                  <CuratedPRStack />
                 </div>
                 <div className="photo-shade-scrim" />
 
@@ -1354,10 +1330,12 @@ export default function App() {
                       9 Merged Upstream Contributions
                     </h3>
                     <p className="type-body card-description">
-                      Shipped frontend fixes, regression tests, and docs merged
-                      into OpenHands (#12223, #12219), Mastra (#15346), Celery
-                      (#10739), Django (#22093), SciPy (#26327), Pylint
-                      (#11487), Typeshed (#16450), and Haystack (#4011).
+                      Shipped bug fixes, regression tests, and documentation
+                      into active production ecosystems. Highlights include
+                      fixing approval-callback routing in Mastra (#15346),
+                      multi-worker path expansion in Celery (#10739),
+                      upload-size boundary docs in Django (#22093), and UI
+                      fixes in OpenHands (#12223, #12219).
                     </p>
                   </div>
                   <a
@@ -1379,11 +1357,9 @@ export default function App() {
                 viewport={VIEWPORT_ONCE}
                 transition={{ duration: 0.55, delay: 0.09, ease: EASE_MORPH }}
               >
-                <div className="card-media-backdrop">
-                  <img
-                    src="/images/showcase-2.jpg"
-                    alt="Engineering workbench in Aceh Indonesia transitioning from Data Science to Full-Stack Systems"
-                  />
+                <div className="card-media-backdrop card-media-backdrop--stack">
+                  <TechnicalGridBackdrop accent="orange" opacity={0.35} />
+                  <EngineerProfilePractice />
                 </div>
                 <div className="photo-shade-scrim" />
 
@@ -1399,17 +1375,19 @@ export default function App() {
                       How I Build &amp; Available Roles
                     </h3>
                     <p className="type-body card-description">
-                      Self-taught developer from Aceh transitioning from Data
-                      Science &amp; MLOps into full-stack and backend
-                      engineering. Open to remote roles, paid internships, and
-                      contract work.
+                      Early-career engineer based in Aceh, Indonesia (UTC+7).
+                      My background in data analysis and MLOps shaped my
+                      disciplined approach to data contracts and failure
+                      modes, leading directly into full-stack and distributed
+                      systems. Ready to contribute to remote teams as a
+                      full-stack or backend engineer.
                     </p>
                   </div>
                   <a
                     href="mailto:ryan@nylo.me"
                     className="type-caption participation-yellow-btn"
                   >
-                    Email ryan@nylo.me
+                    Start a Conversation
                   </a>
                 </div>
               </motion.article>
@@ -1481,11 +1459,11 @@ export default function App() {
             viewport={VIEWPORT_ONCE}
             transition={{ duration: 0.5, ease: EASE_MORPH }}
           >
-            {/* Left Utility Block (Cols 1–4): Availability & Joined Email Action */}
+            {/* Left Utility Block (Cols 1-4): Availability & Joined Email Action */}
             <div className="footer-col-newsletter">
               <h2 className="type-footer-label">Availability</h2>
               <p className="footer-muted-copy">
-                Open to remote roles, paid internships &amp; contract work
+                Available for remote engineering roles, internships &amp; contract builds
               </p>
 
               <form
@@ -1497,15 +1475,15 @@ export default function App() {
                   type="text"
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
-                  placeholder="Your email or message"
-                  aria-label="Your email or message"
+                  placeholder="Share your email or a quick note"
+                  aria-label="Share your email or a quick note"
                   className="type-caption newsletter-input"
                 />
                 <button
                   type="submit"
                   className="type-caption newsletter-submit-btn"
                 >
-                  Email Me
+                  Send Note
                 </button>
               </form>
 
@@ -1517,12 +1495,12 @@ export default function App() {
                   className="carbon-box"
                 >
                   <OrganicSeedBlob variant={1} size={10} color="#ffff48" />
-                  <span>Download Resume / CV (PDF) ↗</span>
+                  <span>Download Resume (PDF) ↗</span>
                 </a>
               </div>
             </div>
 
-            {/* Cols 5–6: CONTACT */}
+            {/* Cols 5-6: CONTACT */}
             <div className="footer-col-contact">
               <h2 className="type-footer-label">Contact</h2>
               <ul className="footer-link-list">
@@ -1544,7 +1522,7 @@ export default function App() {
               </ul>
             </div>
 
-            {/* Cols 7–8: PROFILES */}
+            {/* Cols 7-8: PROFILES */}
             <div className="footer-col-profiles">
               <h2 className="type-footer-label">Profiles</h2>
               <ul className="footer-link-list">
@@ -1591,7 +1569,7 @@ export default function App() {
               </ul>
             </div>
 
-            {/* Cols 9–10: REPOSITORIES */}
+            {/* Cols 9-10: REPOSITORIES */}
             <div className="footer-col-repos">
               <h2 className="type-footer-label">Repositories</h2>
               <ul className="footer-link-list">
@@ -1625,20 +1603,10 @@ export default function App() {
                     wabrix
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="https://github.com/ryanakml/syntrop"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="footer-link"
-                  >
-                    syntrop
-                  </a>
-                </li>
               </ul>
             </div>
 
-            {/* Cols 11–12: CREDENTIALS */}
+            {/* Cols 11-12: CREDENTIALS */}
             <div className="footer-col-credentials">
               <h2 className="type-footer-label">Credentials</h2>
               <ul className="footer-link-list">

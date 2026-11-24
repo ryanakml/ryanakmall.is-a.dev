@@ -1,6 +1,6 @@
-# Ryan Akmal Pasya — Personal Portfolio
+# Ryan Akmal Pasya: Personal Portfolio
 
-The personal portfolio and engineering showcase for Ryan Akmal Pasya ([@ryanakml](https://github.com/ryanakml)).
+Personal portfolio and engineering showcase for Ryan Akmal Pasya ([@ryanakml](https://github.com/ryanakml)).
 
 An editorial, high-performance web experience highlighting full-stack engineering, distributed systems, and open-source contributions.
 
