@@ -28,6 +28,7 @@ import {
   CuratedPRStack,
   EngineerProfilePractice,
 } from './components/Graphics';
+import { MERGED_PR_COUNT, UPSTREAM_PROJECT_COUNT } from './contributions';
 import {
   SkillIconsProvider,
   PORTFOLIO_SKILLS_LIST,
@@ -126,9 +127,9 @@ const BUILD_RAIL_ITEMS = [
   },
   {
     id: 'flowdesk',
-    alt: 'FlowDesk AI transactional outbox architecture and webhook replay runner',
+    alt: 'FlowDesk transactional outbox architecture and webhook replay runner',
     caption:
-      'FlowDesk AI · Multi-tenant WhatsApp inbox with PostgreSQL transactional outbox & replay tests',
+      'FlowDesk · Multi-tenant WhatsApp inbox with PostgreSQL transactional outbox & replay tests',
     repoLabel: 'flowdesk-ai ↗',
     repoHref: 'https://github.com/ryanakml/flowdesk-ai',
     accent: 'yellow',
@@ -139,7 +140,7 @@ const BUILD_RAIL_ITEMS = [
     caption:
       'Deadbolt · Collaborative Go workflow engine with distributed worker leases, fencing tokens & failure recovery',
     repoLabel: 'Deadbolt ↗',
-    repoHref: 'https://github.com/ryanakml/Deadbolt',
+    repoHref: 'https://github.com/ryanakml/deadbolt',
     accent: 'orange',
   },
 ];
@@ -167,34 +168,20 @@ const TECH_STACK_ITEMS = [
    ========================================================================== */
 const PROOF_METRICS = [
   {
-    value: 9,
+    value: MERGED_PR_COUNT,
     suffix: '',
-    label: 'Merged pull requests in upstream open-source repos',
+    label: `Merged pull requests across ${UPSTREAM_PROJECT_COUNT} upstream projects`,
   },
   {
     value: 3,
     suffix: '',
-    label: 'Full-stack applications and workflow systems shipped',
+    label: 'Applications and workflow systems featured here',
   },
   {
     value: 3,
     suffix: '',
     label: 'Professional full-stack and data certifications',
   },
-];
-
-/* ==========================================================================
-   6. Upstream Merged Pull Requests Ledger (Inspectable on Card 1 of Chapter 2)
-   ========================================================================== */
-const UPSTREAM_MERGED_PRS = [
-  { repo: 'OpenHands', pr: '#12223 · #12219' },
-  { repo: 'Mastra', pr: '#15346' },
-  { repo: 'Celery', pr: '#10739' },
-  { repo: 'Django', pr: '#22093' },
-  { repo: 'SciPy', pr: '#26327' },
-  { repo: 'Pylint', pr: '#11487' },
-  { repo: 'Typeshed', pr: '#16450' },
-  { repo: 'Haystack', pr: '#4011' },
 ];
 
 /* ==========================================================================
@@ -1171,7 +1158,7 @@ export default function App() {
 
           {/* ================================================================
               5. Ruled Section Intro & Three Unboxed 131px Serif Count-Up Numerals
-              (9 Merged PRs, 4 Systems Built, 3 IBM & Google Certifications)
+              (upstream PRs, featured systems, and certifications)
               ================================================================ */}
           <section
             id="proof"
@@ -1201,7 +1188,7 @@ export default function App() {
           {/* ================================================================
               6A. Chapter 1: "Selected Systems" (2-at-a-time horizontal snap)
               - Card 1: Wabrix (Managed Edge & AI Handoff)
-              - Card 2: FlowDesk AI (Systems & Outbox)
+              - Card 2: FlowDesk (Systems & Outbox)
               - Card 3: Deadbolt (Go & Distributed State)
               ================================================================ */}
           <section
@@ -1241,9 +1228,9 @@ export default function App() {
                     <div className="card-text-group">
                       <h3 className="type-card-heading">Wabrix</h3>
                       <p className="type-body card-description">
-                        Edge webhook ingress on Cloudflare Workers and Hono, syncing
-                        reactive state through Convex for live operator takeover when
-                        automated message triage drops below confidence thresholds.
+                        WhatsApp support app with Next.js, Convex, and Clerk. Cloudflare
+                        Workers and Hono handle incoming webhooks. Operators can take over
+                        conversations from the knowledge-grounded bot.
                       </p>
                     </div>
                     <div className="card-date-tag-row">
@@ -1270,7 +1257,7 @@ export default function App() {
                   </div>
                 </motion.article>
 
-                {/* Card 2: FlowDesk AI */}
+                {/* Card 2: FlowDesk */}
                 <motion.article
                   className="editorial-media-card"
                   initial={{ opacity: 0, y: 24 }}
@@ -1286,13 +1273,12 @@ export default function App() {
 
                   <div className="card-content-stack">
                     <div className="card-text-group">
-                      <h3 className="type-card-heading">FlowDesk AI</h3>
+                      <h3 className="type-card-heading">FlowDesk</h3>
                       <p className="type-body card-description">
-                        Multi-tenant WhatsApp support platform built around
-                        reliable messaging. Uses PostgreSQL row-level security
-                        for tenant isolation, an atomic transactional outbox to
-                        prevent lost webhook dispatches, and BullMQ workers with
-                        deterministic replay testing.
+                        Shared WhatsApp inbox with a React frontend and Express APIs.
+                        PostgreSQL row-level security isolates tenants, and a transactional
+                        outbox drives webhook retries. Integration tests cover repeated
+                        delivery, and pgvector supplies context for AI drafts.
                       </p>
                     </div>
                     <div className="card-date-tag-row">
@@ -1333,11 +1319,9 @@ export default function App() {
                     <div className="card-text-group">
                       <h3 className="type-card-heading">Deadbolt</h3>
                       <p className="type-body card-description">
-                        Collaborative Go workflow engine engineered for fault-tolerant
-                        job execution. Pairs PostgreSQL state persistence with
-                        NATS JetStream, using heartbeat leases and monotonic fencing tokens
-                        to prevent zombie workers from corrupting state during
-                        network partitions.
+                        Collaborative Go workflow engine in its final release phase. It
+                        pairs PostgreSQL state with NATS JetStream and uses worker
+                        leases and fencing tokens to recover runs after worker loss.
                       </p>
                     </div>
                     <div className="card-date-tag-row">
@@ -1352,7 +1336,7 @@ export default function App() {
                         <span>Go · PostgreSQL · NATS JetStream</span>
                       </span>
                       <a
-                        href="https://github.com/ryanakml/Deadbolt"
+                        href="https://github.com/ryanakml/deadbolt"
                         target="_blank"
                         rel="noreferrer"
                         className="type-caption card-outline-tag"
@@ -1368,7 +1352,7 @@ export default function App() {
 
           {/* ================================================================
               6B. Chapter 2: "Open Source & Engineering Practice" (687x790px)
-              - Card 1: 9 Merged Upstream Contributions (#ffff48 button "Inspect Upstream PRs")
+              - Card 1: Merged upstream contributions
               - Card 2: How I Build & Available Roles (#ffff48 button "Email ryan@nylo.me")
               ================================================================ */}
           <section
@@ -1386,7 +1370,7 @@ export default function App() {
             />
 
             <div className="paired-cards-wrapper paired-media-grid">
-              {/* Card 1: 9 Merged Upstream Contributions */}
+              {/* Card 1: Merged upstream contributions */}
               <motion.article
                 className="editorial-media-card"
                 initial={{ opacity: 0, y: 24 }}
@@ -1407,15 +1391,12 @@ export default function App() {
                   </div>
                   <div className="card-text-group">
                     <h3 className="type-card-heading">
-                      9 Merged Upstream Contributions
+                      {MERGED_PR_COUNT} Merged Upstream Contributions
                     </h3>
                     <p className="type-body card-description">
-                      Shipped bug fixes, regression tests, and documentation
-                      into active production ecosystems. Highlights include
-                      fixing approval-callback routing in Mastra (#15346),
-                      multi-worker path expansion in Celery (#10739),
-                      upload-size boundary docs in Django (#22093), and UI
-                      fixes in OpenHands (#12223, #12219).
+                      Across {UPSTREAM_PROJECT_COUNT} projects, I fixed function-valued
+                      tool approvals in Mastra (#15346), path expansion in Celery
+                      (#10739), and chat loading and routing in OpenHands (#12223).
                     </p>
                   </div>
                   <a
@@ -1628,12 +1609,12 @@ export default function App() {
                 </li>
                 <li>
                   <a
-                    href="https://nylo.me"
+                    href="https://ryanakmall.is-a.dev/"
                     target="_blank"
                     rel="noreferrer"
                     className="footer-link"
                   >
-                    Portfolio (nylo.me)
+                    Portfolio
                   </a>
                 </li>
                 <li>
@@ -1665,7 +1646,7 @@ export default function App() {
                 </li>
                 <li>
                   <a
-                    href="https://github.com/ryanakml/Deadbolt"
+                    href="https://github.com/ryanakml/deadbolt"
                     target="_blank"
                     rel="noreferrer"
                     className="footer-link"

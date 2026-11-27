@@ -1,3 +1,4 @@
+import { MERGED_PR_COUNT } from '../contributions';
 import React from 'react';
 
 /**
@@ -496,22 +497,22 @@ export function CuratedPRStack() {
     {
       repo: 'mastra-ai/mastra',
       pr: '#15346',
-      title: 'Fix approval-callback routing in human-in-the-loop workflows',
-      diff: '+28 -4',
+      title: 'Support function-valued tool approvals',
+      change: 'Bug fix and regression test',
       badge: 'Merged',
     },
     {
       repo: 'celery/celery',
       pr: '#10739',
-      title: 'Expand multi-worker paths with home directory shorthand (~)',
-      diff: '+19 -2',
+      title: 'Expand ~ in spawned workers’ --workdir paths',
+      change: 'Bug fix and regression test',
       badge: 'Merged',
     },
     {
-      repo: 'all-hands-ai/OpenHands',
+      repo: 'OpenHands/OpenHands',
       pr: '#12223',
-      title: 'Resolve terminal stream chunk parser regression on replay',
-      diff: '+45 -11',
+      title: 'Add chat loading skeletons and stabilize conversation routing',
+      change: 'React UI and routing',
       badge: 'Merged',
     },
   ];
@@ -525,9 +526,9 @@ export function CuratedPRStack() {
           <span className="dot dot--green" />
         </div>
         <span className="curated-pr-header-title">
-          upstream contributions · git log --merges
+          upstream pull requests
         </span>
-        <span className="curated-pr-count-badge">9 MERGED PRs</span>
+        <span className="curated-pr-count-badge">{MERGED_PR_COUNT} MERGED PRs</span>
       </div>
 
       <div className="curated-pr-list">
@@ -542,15 +543,15 @@ export function CuratedPRStack() {
               <span className="curated-pr-text">{item.title}</span>
             </div>
             <div className="curated-pr-row-meta">
-              <span className="curated-pr-diff">{item.diff}</span>
-              <span className="curated-pr-verified">Tested &amp; Merged upstream</span>
+              <span className="curated-pr-diff">{item.change}</span>
+              <span className="curated-pr-verified">Merged upstream</span>
             </div>
           </div>
         ))}
 
         {/* Fade-out 4th row indicating additional PRs */}
         <div className="curated-pr-fade-row">
-          <span>+6 more merged PRs across Django (#22093), SciPy, Pylint, Typeshed ↗</span>
+          <span>+{MERGED_PR_COUNT - PRS.length} more merged PRs</span>
         </div>
       </div>
     </div>
@@ -568,7 +569,7 @@ export function EngineerProfilePractice() {
       <div className="engineer-profile-header">
         <div className="engineer-profile-badge-row">
           <span className="profile-status-indicator" />
-          <span className="profile-status-text">AVAILABLE · REMOTE / HYBRID</span>
+          <span className="profile-status-text">AVAILABLE · REMOTE</span>
         </div>
         <span className="profile-tz-pill">UTC+7 · ACEH</span>
       </div>
@@ -596,7 +597,7 @@ export function EngineerProfilePractice() {
           <span className="principle-bullet">02</span>
           <div className="principle-content">
             <strong>Deterministic Replays:</strong>
-            <span>Replay runners verify zero-data-loss failure recovery.</span>
+            <span>Replay tests check deduplication and recovery.</span>
           </div>
         </div>
         <div className="principle-item">
@@ -716,29 +717,29 @@ export function UpstreamContributionsTerminal() {
     {
       repo: 'mastra-ai/mastra',
       pr: '#15346',
-      title: 'Fix approval-callback routing in human-in-the-loop workflows',
-      diff: '+28 -4',
+      title: 'Support function-valued tool approvals',
+      change: 'Bug fix and regression test',
       tag: 'TypeScript · Core',
     },
     {
       repo: 'celery/celery',
       pr: '#10739',
       title: 'Expand multi-worker path configurations with home shorthand',
-      diff: '+19 -2',
+      change: 'Bug fix and regression test',
       tag: 'Python · Distributed',
     },
     {
       repo: 'django/django',
       pr: '#22093',
       title: 'Clarify upload-size multipart boundary verification in docs',
-      diff: '+14 -1',
+      change: 'Documentation',
       tag: 'Python · Framework',
     },
     {
-      repo: 'all-hands-ai/OpenHands',
+      repo: 'OpenHands/OpenHands',
       pr: '#12223',
-      title: 'Resolve terminal stream chunk parser regression on replay',
-      diff: '+45 -11',
+      title: 'Add chat loading skeletons and stabilize conversation routing',
+      change: 'React UI and routing',
       tag: 'Python · Agent Runtime',
     },
   ];
@@ -755,7 +756,7 @@ export function UpstreamContributionsTerminal() {
           github.com/search?q=author:ryanakml+is:merged
         </span>
         <span className="upstream-terminal-badge">
-          <span className="upstream-terminal-status-glow" /> 9 MERGED UPSTREAM
+          <span className="upstream-terminal-status-glow" /> {MERGED_PR_COUNT} MERGED UPSTREAM
         </span>
       </div>
 
@@ -772,7 +773,7 @@ export function UpstreamContributionsTerminal() {
             </div>
             <div className="upstream-pr-meta">
               <span className="upstream-pr-tag">{item.tag}</span>
-              <span className="upstream-pr-diff">{item.diff}</span>
+              <span className="upstream-pr-diff">{item.change}</span>
             </div>
           </div>
         ))}

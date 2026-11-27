@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nylo.me/sitemap.xml
+Sitemap: https://ryanakmall.is-a.dev/sitemap.xml
