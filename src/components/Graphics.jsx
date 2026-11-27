@@ -274,11 +274,11 @@ export function BuildRailSchematic({ id }) {
   const configs = {
     flowdesk: {
       title: 'flowdesk-ai / transactional-outbox',
-      badge: 'PASS · 105 SPECS',
+      badge: 'ARCHITECTURE',
       nodes: [
         { tag: 'INGRESS', title: 'Webhook Event', meta: 'HMAC Validated' },
-        { tag: 'POSTGRES', title: 'Transactional Outbox', meta: 'Atomic RLS Commit', active: true },
-        { tag: 'WORKER', title: 'BullMQ Replay', meta: 'Zero Lost Events' },
+        { tag: 'POSTGRES', title: 'Transactional Outbox', meta: 'Atomic Write', active: true },
+        { tag: 'WORKER', title: 'PostgreSQL Worker', meta: 'Bounded Retries' },
       ],
     },
     deadbolt: {
@@ -292,11 +292,11 @@ export function BuildRailSchematic({ id }) {
     },
     wabrix: {
       title: 'wabrix.nylo.me / edge-ingress',
-      badge: 'EDGE · 12ms',
+      badge: 'ARCHITECTURE',
       nodes: [
         { tag: 'EDGE', title: 'Hono Webhook', meta: 'Cloudflare Workers' },
         { tag: 'STATE', title: 'Convex Thread Sync', meta: 'Realtime Reactive', active: true },
-        { tag: 'OPERATOR', title: 'Live Handoff', meta: 'Confidence Triage' },
+        { tag: 'OPERATOR', title: 'Live Handoff', meta: 'Human Handoff' },
       ],
     },
   };
@@ -363,32 +363,32 @@ export function FlowDeskChatFragment() {
     <div className="flowdesk-chat-fragment" data-ui="true">
       <div className="fragment-header">
         <span className="fragment-dot fragment-dot--green" />
-        <span className="fragment-title">WhatsApp Live Webhook &amp; Outbox Pipeline</span>
-        <span className="fragment-status-badge">PASS · 105/105</span>
+        <span className="fragment-title">WhatsApp Webhook &amp; Outbox Flow</span>
+        <span className="fragment-status-badge">ILLUSTRATION</span>
       </div>
 
       <div className="fragment-chat-canvas">
         {/* User Incoming WhatsApp Message */}
         <div className="chat-bubble chat-bubble--incoming">
           <p className="chat-bubble-text">
-            “Can we guarantee zero lost messages on webhook network timeout?”
+            “What happens if Meta sends the same webhook twice?”
           </p>
-          <span className="chat-bubble-meta">10:42 AM · +62 812-4491-0021 ✓✓</span>
+          <span className="chat-bubble-meta">Example incoming event</span>
         </div>
 
         {/* System RAG Grounded & Outbox Response */}
         <div className="chat-bubble chat-bubble--grounded">
           <div className="grounded-badge-row">
-            <span className="grounded-pill">⚡ ATOMIC OUTBOX VERIFIED</span>
-            <span className="grounded-latency">42ms · Postgres RLS</span>
+            <span className="grounded-pill">ATOMIC OUTBOX</span>
+            <span className="grounded-latency">PostgreSQL</span>
           </div>
           <p className="chat-bubble-text">
-            Outbox event persisted in the same ACID commit as message payload.
-            BullMQ workers execute deterministic replays on transient webhook failures.
+            Ingress deduplicates the webhook and commits the event with its outbox record.
+            The worker claims the job from PostgreSQL and retries transient failures.
           </p>
           <div className="grounded-source-row">
-            <span className="grounded-file">schema.sql:outbox_events</span>
-            <span className="grounded-spec">replay_test.ts: pass</span>
+            <span className="grounded-file">PostgreSQL outbox</span>
+            <span className="grounded-spec">Replay integration test</span>
           </div>
         </div>
       </div>
@@ -406,7 +406,7 @@ export function DeadboltFencingDiagram() {
       <div className="deadbolt-fencing-header">
         <span className="fragment-dot fragment-dot--orange" />
         <span className="deadbolt-fencing-title">DISTRIBUTED LEASE FENCING PROTOCOL</span>
-        <span className="deadbolt-epoch-badge">EPOCH FENCE #05</span>
+        <span className="deadbolt-epoch-badge">EXAMPLE · EPOCH #05</span>
       </div>
 
       <div className="deadbolt-lanes-container">
@@ -462,20 +462,20 @@ export function WabrixEdgeFragment() {
     <div className="wabrix-edge-fragment" data-ui="true">
       <div className="fragment-header">
         <span className="fragment-dot fragment-dot--yellow" />
-        <span className="fragment-title">Cloudflare Workers Edge · 12ms Ingress</span>
+        <span className="fragment-title">Cloudflare Workers · Example Ingress</span>
         <span className="fragment-status-badge">HONO + CONVEX</span>
       </div>
 
       <div className="wabrix-steps-stack">
         <div className="wabrix-step-row">
           <span className="step-badge">INGRESS</span>
-          <span className="step-name">POST /v1/webhooks/whatsapp</span>
+          <span className="step-name">POST /webhooks/whatsapp</span>
           <span className="step-status">HMAC SHA-256 ✔</span>
         </div>
         <div className="wabrix-step-row wabrix-step-row--alert">
           <span className="step-badge step-badge--alert">CONFIDENCE</span>
-          <span className="step-name">AI Triage: 58% (&lt; 80% Threshold)</span>
-          <span className="step-status step-status--alert">TAKEOVER REQUIRED</span>
+          <span className="step-name">Operator requests takeover</span>
+          <span className="step-status step-status--alert">HANDOFF REQUESTED</span>
         </div>
         <div className="wabrix-step-row wabrix-step-row--handoff">
           <span className="step-badge step-badge--handoff">CONVEX SYNC</span>
@@ -793,7 +793,7 @@ export function EngineeringInvariantsMatrix() {
       code: 'TX-OUTBOX',
       label: 'ATOMIC OUTBOX PATTERN',
       desc: 'Single ACID transaction for PostgreSQL state mutation + outbox enqueue. Eliminates dual-write divergence.',
-      pill: 'ZERO LOSS',
+      pill: 'ATOMIC WRITE',
     },
     {
       code: 'EPOCH-FENCE',
@@ -824,7 +824,7 @@ export function EngineeringInvariantsMatrix() {
             ENGINEERING EXECUTION SPEC · INVARIANTS
           </span>
         </div>
-        <span className="invariants-status-tag">SYSTEMS READY</span>
+        <span className="invariants-status-tag">DESIGN PATTERNS</span>
       </div>
 
       <div className="invariants-matrix-list">
